@@ -1,0 +1,122 @@
+.label-nome_real {
+    background-color: rgba(255, 255, 255, 0.85);
+    color: #2c3e50;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.label-legenda {
+    background-color: rgba(255, 255, 200, 0.85);
+    color: #6b4e00;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+.label-nome {
+    background-color: rgba(200, 230, 255, 0.9);
+    color: #004080;
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+}
+
+.header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.2em;
+    font-weight: 300;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.map-container {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+
+#map {
+    height: 700px;
+    width: 100%;
+}
+
+.status-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #27ae60;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    z-index: 9999;
+}
+
+.status-indicator.loading {
+    background: #f39c12;
+}
+
+.status-indicator.error {
+    background: #e74c3c;
+}
+
+#diagnosticoPainel {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: white;
+    border: 2px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 12px;
+    max-width: 300px;
+    z-index: 9999;
+}
+
+.diagnostico-item {
+    margin: 3px 0;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.diagnostico-ok {
+    background: #d4edda;
+    color: #155724;
+}
+
+.diagnostico-erro {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.diagnostico-aviso {
+    background: #fff3cd;
+    color: #856404;
+}
