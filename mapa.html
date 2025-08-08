@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mapa de Arraial do Cabo - RJ | SIRGAS 2000</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="statusIndicator" class="status-indicator loading">Carregando mapa...</div>
+
+<div class="header">
+    <h1>Mapa Georreferenciado de Arraial do Cabo - RJ</h1>
+    <p>Sistema de Referência: SIRGAS 2000 (EPSG:4674)</p>
+</div>
+
+<div class="container">
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
+</div>
+
+<div id="diagnosticoPainel">
+    <strong>📊 Diagnóstico do Sistema</strong>
+    <div id="statusLeaflet" class="diagnostico-item">🔄 Verificando Leaflet...</div>
+    <div id="statusRede" class="diagnostico-item">🔄 Verificando conexão...</div>
+    <div id="statusMapa" class="diagnostico-item">🔄 Verificando mapa...</div>
+    <div id="statusGeoJSON" class="diagnostico-item">🔄 Verificando GeoJSON...</div>
+    <div id="statusCamadas" class="diagnostico-item">🔄 Verificando camadas...</div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

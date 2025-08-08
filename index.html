@@ -1,38 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Mapa de Arraial do Cabo - RJ | SIRGAS 2000</title>
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css" />
+    <title>Logos - Geoprocessamento & Mobilidade Urbana</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background: #f6f8fa;
+            margin: 0;
+            padding: 40px 0;
+        }
+        .logo-container {
+            margin: 30px 0;
+        }
+        img {
+            max-width: 200px;
+            height: auto;
+            margin: 20px auto;
+            display: block;
+        }
+        h1 {
+            color: #0e294b;
+        }
+        .subtitle {
+            color: #335e94;
+            font-size: 1.1em;
+            margin-bottom: 40px;
+        }
+    </style>
 </head>
 <body>
-<div id="statusIndicator" class="status-indicator loading">Carregando mapa...</div>
+    <h1>Geoprocessamento & Mobilidade Urbana</h1>
+    <div class="subtitle">Prefeitura de Arraial do Cabo - RJ</div>
 
-<div class="header">
-    <h1>Mapa Georreferenciado de Arraial do Cabo - RJ</h1>
-    <p>Sistema de Referência: SIRGAS 2000 (EPSG:4674)</p>
-</div>
-
-<div class="container">
-    <div class="map-container">
-        <div id="map"></div>
+    <!-- <div class="logo-container">        
+        <img src="img/geo.png" alt="Logo Geoprocessamento Arraial do Cabo RJ">
+    </div-->
+    <div class="logo-container">
+        <a href="#">
+            <img src="img/semmu.png" alt="Logo Secretaria de Mobilidade Urbana Arraial do Cabo RJ">
+        </a>
     </div>
-</div>
-
-<div id="diagnosticoPainel">
-    <strong>📊 Diagnóstico do Sistema</strong>
-    <div id="statusLeaflet" class="diagnostico-item">🔄 Verificando Leaflet...</div>
-    <div id="statusRede" class="diagnostico-item">🔄 Verificando conexão...</div>
-    <div id="statusMapa" class="diagnostico-item">🔄 Verificando mapa...</div>
-    <div id="statusGeoJSON" class="diagnostico-item">🔄 Verificando GeoJSON...</div>
-    <div id="statusCamadas" class="diagnostico-item">🔄 Verificando camadas...</div>
-</div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="script.js"></script>
 </body>
 </html>
