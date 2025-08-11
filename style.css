@@ -1,78 +1,78 @@
 /* Botão modo escuro */
-/*.toggle-dark {*/
-/*    background: rgba(255,255,255,0.15);*/
-/*    border: 1px solid rgba(255,255,255,0.3);*/
-/*    color: white;*/
-/*    padding: 8px 12px;*/
-/*    border-radius: 5px;*/
-/*    cursor: pointer;*/
-/*    font-size: 0.9em;*/
-/*    margin-top: 10px;*/
-/*}*/
-/*.toggle-dark:hover {*/
-/*    background: rgba(255,255,255,0.25);*/
-/*}*/
+.toggle-dark {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-top: 10px;
+}
+.toggle-dark:hover {
+    background: rgba(255,255,255,0.25);
+}
 
-/*!* Responsividade *!*/
-/*@media (max-width: 768px) {*/
-/*    .header h1 {*/
-/*        font-size: 1.5em;*/
-/*    }*/
-/*    .container {*/
-/*        padding: 10px;*/
-/*    }*/
-/*    #map {*/
-/*        height: 500px;*/
-/*    }*/
-/*    #diagnosticoPainel {*/
-/*        bottom: 10px;*/
-/*        left: 10px;*/
-/*        font-size: 11px;*/
-/*        max-width: 90%;*/
-/*    }*/
-/*}*/
-/*@media (max-width: 480px) {*/
-/*    #map {*/
-/*        height: 400px;*/
-/*    }*/
-/*    .toggle-dark {*/
-/*        font-size: 0.8em;*/
-/*        padding: 6px 10px;*/
-/*    }*/
-/*}*/
+/* Responsividade */
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 1.5em;
+    }
+    .container {
+        padding: 10px;
+    }
+    #map {
+        height: 500px;
+    }
+    #diagnosticoPainel {
+        bottom: 10px;
+        left: 10px;
+        font-size: 11px;
+        max-width: 90%;
+    }
+}
+@media (max-width: 480px) {
+    #map {
+        height: 400px;
+    }
+    .toggle-dark {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+}
 
-/*!* Dark mode geral *!*/
-/*body.dark-mode {*/
-/*    background-color: #1e1e1e;*/
-/*    color: #ddd;*/
-/*}*/
-/*body.dark-mode .header {*/
-/*    background: linear-gradient(135deg, #000, #444);*/
-/*}*/
-/*body.dark-mode .map-container {*/
-/*    background: #2a2a2a;*/
-/*}*/
-/*body.dark-mode #diagnosticoPainel {*/
-/*    background: #2d2d2d;*/
-/*    border-color: #555;*/
-/*    color: #ccc;*/
-/*}*/
-/*body.dark-mode .diagnostico-ok {*/
-/*    background: #225522;*/
-/*    color: #a0f0a0;*/
-/*}*/
-/*body.dark-mode .diagnostico-erro {*/
-/*    background: #552222;*/
-/*    color: #f0a0a0;*/
-/*}*/
-/*body.dark-mode .diagnostico-aviso {*/
-/*    background: #554422;*/
-/*    color: #f0e0a0;*/
-/*}*/
-/*body.dark-mode .status-indicator {*/
-/*    background: #333 !important;*/
-/*    color: #fff !important;*/
-/*}*/
+/* Dark mode geral */
+body.dark-mode {
+    background-color: #1e1e1e;
+    color: #ddd;
+}
+body.dark-mode .header {
+    background: linear-gradient(135deg, #000, #444);
+}
+body.dark-mode .map-container {
+    background: #2a2a2a;
+}
+body.dark-mode #diagnosticoPainel {
+    background: #2d2d2d;
+    border-color: #555;
+    color: #ccc;
+}
+body.dark-mode .diagnostico-ok {
+    background: #225522;
+    color: #a0f0a0;
+}
+body.dark-mode .diagnostico-erro {
+    background: #552222;
+    color: #f0a0a0;
+}
+body.dark-mode .diagnostico-aviso {
+    background: #554422;
+    color: #f0e0a0;
+}
+body.dark-mode .status-indicator {
+    background: #333 !important;
+    color: #fff !important;
+}
 
 
 .label-nome_real {

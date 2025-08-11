@@ -371,32 +371,32 @@ document.addEventListener('DOMContentLoaded', function() {
     atualizarDiagnostico();
 
     // Botão modo escuro
-    // const btnDark = document.getElementById('toggleDarkMode');
-    // btnDark.addEventListener('click', function() {
-    //     document.body.classList.toggle('dark-mode');
-    //
-    //     // Troca camada base
-    //     if (document.body.classList.contains('dark-mode')) {
-    //         map.eachLayer(function(layer) {
-    //             map.removeLayer(layer);
-    //         });
-    //         camadasPorTipo['uf']?.addTo(map);
-    //         camadasPorTipo['municipio']?.addTo(map);
-    //         camadasPorTipo['logradouros']?.addTo(map);
-    //         camadasPorTipo['relevo']?.addTo(map);
-    //         // Adiciona mapa escuro
-    //         cartoDark.addTo(map);
-    //         btnDark.textContent = '☀️ Modo Claro';
-    //     } else {
-    //         map.eachLayer(function(layer) {
-    //             map.removeLayer(layer);
-    //         });
-    //         camadasPorTipo['uf']?.addTo(map);
-    //         camadasPorTipo['municipio']?.addTo(map);
-    //         camadasPorTipo['logradouros']?.addTo(map);
-    //         camadasPorTipo['relevo']?.addTo(map);
-    //         openStreetMap.addTo(map);
-    //         btnDark.textContent = '🌙 Modo Escuro';
-    //     }
-    // });
+    const btnDark = document.getElementById('toggleDarkMode');
+    btnDark.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+
+        // Troca camada base
+        if (document.body.classList.contains('dark-mode')) {
+            map.eachLayer(function(layer) {
+                map.removeLayer(layer);
+            });
+            camadasPorTipo['uf']?.addTo(map);
+            camadasPorTipo['municipio']?.addTo(map);
+            camadasPorTipo['logradouros']?.addTo(map);
+            camadasPorTipo['relevo']?.addTo(map);
+            // Adiciona mapa escuro
+            cartoDark.addTo(map);
+            btnDark.textContent = '☀️ Modo Claro';
+        } else {
+            map.eachLayer(function(layer) {
+                map.removeLayer(layer);
+            });
+            camadasPorTipo['uf']?.addTo(map);
+            camadasPorTipo['municipio']?.addTo(map);
+            camadasPorTipo['logradouros']?.addTo(map);
+            camadasPorTipo['relevo']?.addTo(map);
+            openStreetMap.addTo(map);
+            btnDark.textContent = '🌙 Modo Escuro';
+        }
+    });
 });
