@@ -4,6 +4,9 @@ let camadasCarregadas = 0;
 let totalCamadas = 4;
 let camadasPorTipo = {}; // Armazenar camadas por tipo
 
+// 🔹 Variáveis globais para as bases
+let openStreetMap, satelliteLayer, cartoLight, cartoDark;
+
 function atualizarStatus(mensagem, tipo = 'loading') {
     statusIndicator.textContent = mensagem;
     statusIndicator.className = `status-indicator ${tipo}`;
@@ -58,30 +61,29 @@ function criarMapa() {
     map = L.map('map').setView(centroCidade, zoomInicial);
 
     // Camadas base
-    const openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 18,
         zIndex: 1
     });
 
-    const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '© Esri, DigitalGlobe, GeoEye, Earthstar Geographics',
         maxZoom: 18,
         zIndex: 1
     });
 
-    const cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap contributors, © CARTO',
         maxZoom: 18,
         zIndex: 1
     });
 
-    const cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap contributors, © CARTO',
         maxZoom: 18,
         zIndex: 1
     });
-
 
     openStreetMap.addTo(map);
 
