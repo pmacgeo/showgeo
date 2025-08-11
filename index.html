@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mapa de Arraial do Cabo - RJ | SIRGAS 2000</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="menu-open">
+
+<!-- Botão Hamburguer -->
+<!--<div id="hamburgerBtn" class="hamburger-btn">☰</div>-->
+
+<!-- Menu Lateral (aberto por padrão) -->
+<nav id="sideMenu" class="side-menu open">
+    <div id="hamburgerBtn" class="hamburger-btn">☰</div>
+    <h3>📌 Menu</h3>
+
+    <!-- Botão alternar modo escuro -->
+    <button id="toggleDarkModeSidebar">🌙 Alternar Modo Escuro</button>
+
+    <hr />
+
+    <!-- Controle de Camadas -->
+    <div id="camadasContainer">
+        <h4>🗂 Camadas</h4>
+        <div id="camadasList"></div>
+    </div>
+
+    <hr />
+
+    <!-- Diagnóstico -->
+    <div id="diagnosticoPainel">
+        <strong>📊 Diagnóstico do Sistema</strong>
+        <div id="statusLeaflet" class="diagnostico-item">🔄 Verificando Leaflet...</div>
+        <div id="statusRede" class="diagnostico-item">🔄 Verificando conexão...</div>
+        <div id="statusMapa" class="diagnostico-item">🔄 Verificando mapa...</div>
+        <div id="statusGeoJSON" class="diagnostico-item">🔄 Verificando GeoJSON...</div>
+        <div id="statusCamadas" class="diagnostico-item">🔄 Verificando camadas...</div>
+    </div>
+</nav>
+
+<!-- Status indicador -->
 <div id="statusIndicator" class="status-indicator loading">Carregando mapa...</div>
 
+<!-- Cabeçalho -->
 <div class="header">
     <h2>Mapa Georreferenciado de Arraial do Cabo - RJ</h2>
     <p>Sistema de Referência: SIRGAS 2000 (EPSG:4674)</p>
-    <button id="toggleDarkMode" class="toggle-dark">🌙 Modo Escuro</button>
+<!--    <button id="toggleDarkMode" class="toggle-dark">🌙 Modo Escuro</button>-->
 </div>
 
+<!-- Mapa -->
 <div class="container">
     <div class="map-container">
         <div id="map"></div>
     </div>
 </div>
 
-<div id="diagnosticoPainel">
-    <strong>📊 Diagnóstico do Sistema</strong>
-    <div id="statusLeaflet" class="diagnostico-item">🔄 Verificando Leaflet...</div>
-    <div id="statusRede" class="diagnostico-item">🔄 Verificando conexão...</div>
-    <div id="statusMapa" class="diagnostico-item">🔄 Verificando mapa...</div>
-    <div id="statusGeoJSON" class="diagnostico-item">🔄 Verificando GeoJSON...</div>
-    <div id="statusCamadas" class="diagnostico-item">🔄 Verificando camadas...</div>
-</div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>

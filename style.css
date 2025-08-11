@@ -1,3 +1,176 @@
+/* Transição para o header */
+.header {
+    transition: margin-left 0.3s ease, max-width 0.3s ease, padding 0.3s ease;
+    max-width: calc(100% - 260px); /* considerando menu aberto */
+    margin-left: 260px;
+    overflow: hidden;
+}
+
+/* Quando o menu está fechado (body sem menu-open) */
+body:not(.menu-open) .header {
+    max-width: 100%;
+    margin-left: 0;
+    padding-left: 20px; /* ou ajuste conforme quiser */
+}
+
+/* Controlar tamanho da fonte para título e subtítulo */
+.header h2, .header p {
+    transition: font-size 0.3s ease, opacity 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Reduz o tamanho e esconde suavemente o subtítulo quando o menu está fechado */
+body:not(.menu-open) .header h2 {
+    font-size: 1.2em; /* diminuir um pouco o título */
+}
+
+body:not(.menu-open) .header p {
+    opacity: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    pointer-events: none;
+}
+/* Estilo para o controle de camadas dentro do menu */
+#camadasList .leaflet-control {
+    position: relative;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+#camadasList .leaflet-control-layers {
+    width: 100%;
+    font-size: 0.9em;
+    background: transparent;
+}
+#camadasList .leaflet-control-layers-list {
+    padding: 0;
+}
+#camadasList .leaflet-control-layers-separator {
+    display: none; /* vamos separar manualmente */
+}
+#camadasList .leaflet-control-layers-base,
+#camadasList .leaflet-control-layers-overlays {
+    margin-bottom: 10px;
+}
+#camadasList label {
+    display: block;
+    padding: 5px;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    background: #ecf0f1;
+    cursor: pointer;
+}
+#camadasList label:hover {
+    background: #bdc3c7;
+}
+
+/* Ajuste mapa para levar em conta o menu aberto/fechado */
+body.menu-open #map {
+    margin-left: 260px; /* mesma largura do menu */
+    transition: margin-left 0.3s ease;
+}
+body:not(.menu-open) #map {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+}
+
+
+/* Botão hambúrguer */
+.hamburger-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: #3498db;
+    color: white;
+    font-size: 1.5em;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 10001;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+.hamburger-btn:hover {
+    background: #2980b9;
+}
+
+/* Menu lateral oculto */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background: white;
+    border-right: 2px solid #ccc;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    transition: left 0.3s ease;
+    z-index: 10000;
+    overflow-x: hidden;   /* evita conteúdo horizontal vazar */
+    overflow-y: auto;
+}
+.side-menu.open {
+    left: 0;
+}
+/* Quando fechado: só uma faixa estreita */
+.side-menu.closed {
+    width: 0;          /* só a faixa */
+    padding: 10px 2px;    /* menos padding */
+}
+/* Esconde o conteúdo quando fechado */
+.side-menu.closed *:not(.hamburger-btn) {
+    display: none;
+}
+.side-menu h3, .side-menu h4 {
+    /*margin-top: 0;*/
+    /*padding-bottom: 20px;*/
+    text-align-last: center;
+}
+.side-menu button, .side-menu a {
+    display: block;
+    width: 100%;
+    background: #ecf0f1;
+    border: none;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+    color: #2c3e50;
+}
+.side-menu .hamburger-btn {
+    background: #3498db;
+    color: white;
+    font-size: 1.3em;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.side-menu button:hover, .side-menu a:hover {
+    background: #bdc3c7;
+}
+
+/* Dark mode do menu */
+body.dark-mode .side-menu {
+    background: #2c2c2c;
+    border-color: #444;
+    color: #eee;
+}
+body.dark-mode .side-menu button, body.dark-mode .side-menu a {
+    background: #3a3a3a;
+    color: #eee;
+}
+body.dark-mode .side-menu button:hover, body.dark-mode .side-menu a:hover {
+    background: #555;
+}
+
 /* Botão modo escuro */
 .toggle-dark {
     background: rgba(255,255,255,0.15);
@@ -6,38 +179,49 @@
     padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
-    margin-top: 10px;
 }
 .toggle-dark:hover {
     background: rgba(255,255,255,0.25);
 }
 
 /* Responsividade */
-@media (max-width: 768px) {
-    .header h1 {
-        font-size: 1.5em;
+/* DESKTOP: desloca header e mapa */
+@media (min-width: 769px) {
+    body.menu-open #map {
+        margin-left: 260px; /* mesma largura do menu */
     }
-    .container {
-        padding: 10px;
+    body:not(.menu-open) #map {
+        margin-left: 0;
     }
-    #map {
-        height: 500px;
+
+    .header {
+        max-width: calc(100% - 260px);
+        margin-left: 260px;
     }
-    #diagnosticoPainel {
-        bottom: 10px;
-        left: 10px;
-        font-size: 11px;
-        max-width: 90%;
+    body:not(.menu-open) .header {
+        max-width: 100%;
+        margin-left: 0;
     }
 }
-@media (max-width: 480px) {
-    #map {
-        height: 400px;
+
+/* MOBILE: menu sobrepõe (sem deslocar header/mapa) */
+@media (max-width: 768px) {
+    #map,
+    .header {
+        margin-left: 0 !important;
+        max-width: 100% !important;
     }
-    .toggle-dark {
-        font-size: 0.8em;
-        padding: 6px 10px;
+
+    /* menu ocupa toda a largura */
+    .side-menu {
+        width: 100%;
+        left: -100%;
+    }
+    .side-menu.open {
+        left: 0;
+    }
+    .side-menu.closed {
+        left: -100%;
     }
 }
 
@@ -52,97 +236,28 @@ body.dark-mode .header {
 body.dark-mode .map-container {
     background: #2a2a2a;
 }
-body.dark-mode #diagnosticoPainel {
-    background: #2d2d2d;
-    border-color: #555;
-    color: #ccc;
+
+/* Estilo diagnóstico dentro do menu */
+.diagnostico-item {
+    margin: 3px 0;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.85em;
 }
-body.dark-mode .diagnostico-ok {
-    background: #225522;
-    color: #a0f0a0;
+.diagnostico-ok {
+    background: #d4edda;
+    color: #155724;
 }
-body.dark-mode .diagnostico-erro {
-    background: #552222;
-    color: #f0a0a0;
+.diagnostico-erro {
+    background: #f8d7da;
+    color: #721c24;
 }
-body.dark-mode .diagnostico-aviso {
-    background: #554422;
-    color: #f0e0a0;
-}
-body.dark-mode .status-indicator {
-    background: #333 !important;
-    color: #fff !important;
+.diagnostico-aviso {
+    background: #fff3cd;
+    color: #856404;
 }
 
-
-.label-nome_real {
-    background-color: rgba(255, 255, 255, 0.85);
-    color: #2c3e50;
-    padding: 2px 6px;
-    font-size: 11px;
-    font-weight: bold;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-.label-legenda {
-    background-color: rgba(255, 255, 200, 0.85);
-    color: #6b4e00;
-    padding: 2px 6px;
-    font-size: 11px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-.label-nome {
-    background-color: rgba(200, 230, 255, 0.9);
-    color: #004080;
-    padding: 2px 6px;
-    font-size: 11px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-}
-
-.header {
-    background: linear-gradient(135deg, #2c3e50, #3498db);
-    color: white;
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 2.2em;
-    font-weight: 300;
-}
-
-.container {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.map-container {
-    background: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-}
-
-#map {
-    height: 700px;
-    width: 100%;
-}
-
+/* Indicador de status */
 .status-indicator {
     position: fixed;
     top: 20px;
@@ -154,46 +269,44 @@ body {
     font-size: 0.9em;
     z-index: 9999;
 }
+.status-indicator.loading { background: #f39c12; }
+.status-indicator.error { background: #e74c3c; }
 
-.status-indicator.loading {
-    background: #f39c12;
+/* Labels do mapa */
+.label-nome_real, .label-legenda, .label-nome {
+    padding: 2px 6px;
+    font-size: 11px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
+.label-nome_real { background-color: rgba(255,255,255,0.85); color: #2c3e50; font-weight: bold; }
+.label-legenda { background: rgba(255,255,200,0.85); color: #6b4e00; }
+.label-nome { background: rgba(200,230,255,0.9); color: #004080; }
 
-.status-indicator.error {
-    background: #e74c3c;
+/* Layout geral */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-
-#diagnosticoPainel {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
+.header {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.map-container {
     background: white;
-    border: 2px solid #ccc;
-    padding: 10px;
-    border-radius: 5px;
-    font-family: monospace;
-    font-size: 12px;
-    max-width: 300px;
-    z-index: 9999;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
-
-.diagnostico-item {
-    margin: 3px 0;
-    padding: 2px 5px;
-    border-radius: 3px;
-}
-
-.diagnostico-ok {
-    background: #d4edda;
-    color: #155724;
-}
-
-.diagnostico-erro {
-    background: #f8d7da;
-    color: #721c24;
-}
-
-.diagnostico-aviso {
-    background: #fff3cd;
-    color: #856404;
+#map {
+    height: 700px;
+    width: 100%;
 }
