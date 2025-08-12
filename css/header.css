@@ -24,22 +24,59 @@
 }
 
 .top-bar .search-container {
-    flex: 2;
+    flex: 0 1 280px; /* largura máxima fixa de ~220px, mas ainda flexível */
     display: flex;
+    min-width: 180px; /* não deixa encolher muito */
 }
+
 .top-bar .search-container input {
-    width: 100%;
-    padding: 6px 10px;
+    flex: 1;
+    padding: 6px 10px;    /* mais confortável para digitar */
+    font-size: 1em;       /* fonte legível */
     border-radius: 4px 0 0 4px;
     border: none;
 }
+
 .top-bar .search-container button {
-    padding: 6px 10px;
-    border-radius: 0 4px 4px 0;
-    background: var(--cor-primaria);
-    color: white;
-    border: none;
-    cursor: pointer;
+    padding: 6px 12px;    /* botão maior e mais fácil clique */
+    font-size: 1em;
+}
+
+/* Hover da pesquisa */
+.top-bar .search-container button:hover {
+    background: #2980b9;
+    transform: scale(1.05);
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+/* Hover dos botões rápidos */
+.top-bar .quick-buttons button:hover {
+    color: #f1c40f;
+    transform: scale(1.15);
+    transition: color 0.2s ease, transform 0.15s ease;
+}
+
+/* Hover do hambúrguer */
+.top-bar .hamburger-btn:hover {
+    color: #f1c40f;
+    transform: scale(1.15);
+    transition: color 0.2s ease, transform 0.15s ease;
+}
+
+.top-bar .logo {
+    flex: 0 1 auto;
+    margin-right: 10px;
+}
+
+.top-bar .logo h1 {
+    font-size: 1em;  /* menor para dar mais ar */
+    white-space: nowrap;
+}
+
+.top-bar .quick-buttons {
+    flex: 0 1 auto;
+    display: flex;
+    gap: 8px; /* espaço uniforme */
 }
 
 .top-bar .quick-buttons button {
@@ -49,4 +86,15 @@
     font-size: 1.3em;
     margin-left: 12px;
     cursor: pointer;
+}
+
+.top-bar .hamburger-btn {
+    background: transparent;
+    color: white;
+    font-size: 1.5em;
+    border: none;
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    box-shadow: none;
 }

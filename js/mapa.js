@@ -62,7 +62,7 @@ function criarMapa() {
             if (layer) overlayIBGE[nomesCamadasIBGE[idx]] = layer;
         });
 
-        // PMAC
+        // PMAC Dados Gerais
         Promise.all([
             carregarGeoJSONComDetalhes('pmac_dados1.geojson', { color: '#e67e22', weight: 3, opacity: 0.9, fillColor:'#e67e22', fillOpacity:0.4 }, 'PMAC Dados 1', 'pmac1'),
             carregarGeoJSONComDetalhes('pmac_dados2.geojson', { color: '#c0392b', weight: 3, opacity: 0.9, fillColor:'#c0392b', fillOpacity:0.4 }, 'PMAC Dados 2', 'pmac2')
@@ -72,39 +72,79 @@ function criarMapa() {
                 if (layer) overlayPMAC[nomesCamadasPMAC[idx]] = layer;
             });
 
-            const baseMaps = {
-                "🗺️ OpenStreetMap": openStreetMap,
-                "🛰️ Imagem de Satélite": satelliteLayer,
-                "🌅 Carto Light": cartoLight,
-                "🌃️ Carto Dark": cartoDark
-            };
+            // PMAC - Zoneamentos
+            const overlayZoneamentosPMAC = {};
+            const zoneamentoFiles = [
+                { file: 'geojson/zona_zcvs.geojson',   name: 'Zona ZCVS',   color: '#FF7800' },
+                { file: 'geojson/zona_zeds.geojson',   name: 'Zona ZEDS',   color: '#3498db' },
+                { file: 'geojson/zona_zeis.geojson',   name: 'Zona ZEIS',   color: '#2ecc71' },
+                { file: 'geojson/zona_zen.geojson',    name: 'Zona ZEN',    color: '#8e44ad' },
+                { file: 'geojson/zona_zep.geojson',    name: 'Zona ZEP',    color: '#27ae60' },
+                { file: 'geojson/zona_zh.geojson',     name: 'Zona ZH',     color: '#c0392b' },
+                { file: 'geojson/zona_zic.geojson',    name: 'Zona ZIC',    color: '#f39c12' },
+                { file: 'geojson/zona_zie.geojson',    name: 'Zona ZIE',    color: '#d35400' },
+                { file: 'geojson/zona_zoc.geojson',    name: 'Zona ZOC',    color: '#1abc9c' },
+                { file: 'geojson/zona_zo.geojson',     name: 'Zona ZO',     color: '#9b59b6' },
+                { file: 'geojson/zona_zp.geojson',     name: 'Zona ZP',     color: '#34495e' },
+                { file: 'geojson/zona_zport.geojson',  name: 'Zona ZPORT',  color: '#2c3e50' },
+                { file: 'geojson/zona_zpvs.geojson',   name: 'Zona ZPVS',   color: '#16a085' },
+                { file: 'geojson/zona_zr.geojson',     name: 'Zona ZR',     color: '#e74c3c' },
+                { file: 'geojson/zona_zuc.geojson',    name: 'Zona ZUC',    color: '#8e44ad' },
+                { file: 'geojson/zona_zuesp.geojson',  name: 'Zona ZUESP',  color: '#2980b9' },
+                { file: 'geojson/zona_zur2.geojson',   name: 'Zona ZUR2',   color: '#7f8c8d' }
+            ];
 
-            const controlIBGE = L.control.layers(baseMaps, overlayIBGE, { collapsed: false });
-            const controlPMAC = L.control.layers(null, overlayPMAC, { collapsed: false });
+            Promise.all(
+                zoneamentoFiles.map(z =>
+                    carregarGeoJSONComDetalhes(z.file, { color: z.color, weight: 2, fillOpacity: 0.3 }, z.name, 'zoneamento')
+                        .then(layer => {
+                            if (layer) overlayZoneamentosPMAC[z.name] = layer;
+                        })
+                )
+            ).then(() => {
+                // Controles principais base e IBGE
+                const baseMaps = {
+                    "🗺️ OpenStreetMap": openStreetMap,
+                    "🛰️ Imagem de Satélite": satelliteLayer,
+                    "🌅 Carto Light": cartoLight,
+                    "🌃️ Carto Dark": cartoDark
+                };
 
-            controlIBGE.addTo(map);
-            controlPMAC.addTo(map);
+                const controlIBGE = L.control.layers(baseMaps, overlayIBGE, { collapsed: false });
+                const controlPMAC = L.control.layers(null, overlayPMAC, { collapsed: false });
+                const controlZoneamentosPMAC = L.control.layers(null, overlayZoneamentosPMAC, { collapsed: true });
 
-            const camadasList = document.getElementById('camadasList');
-            camadasList.innerHTML = '';
+                controlIBGE.addTo(map);
+                controlPMAC.addTo(map);
+                controlZoneamentosPMAC.addTo(map);
 
-            const titleBase = document.createElement('h5');
-            titleBase.textContent = 'Mapas Base';
-            camadasList.appendChild(titleBase);
-            camadasList.appendChild(controlIBGE.getContainer().querySelector('.leaflet-control-layers-base'));
+                // Atualiza menu lateral personalizado
+                const camadasList = document.getElementById('camadasList');
+                camadasList.innerHTML = '';
 
-            const titleIBGE = document.createElement('h5');
-            titleIBGE.textContent = 'IBGE - Dados Abertos';
-            camadasList.appendChild(titleIBGE);
-            camadasList.appendChild(controlIBGE.getContainer().querySelector('.leaflet-control-layers-overlays'));
+                const titleBase = document.createElement('h5');
+                titleBase.textContent = 'Mapas Base';
+                camadasList.appendChild(titleBase);
+                camadasList.appendChild(controlIBGE.getContainer().querySelector('.leaflet-control-layers-base'));
 
-            const titlePMAC = document.createElement('h5');
-            titlePMAC.textContent = 'PMAC - Dados Coletados';
-            camadasList.appendChild(titlePMAC);
-            camadasList.appendChild(controlPMAC.getContainer().querySelector('.leaflet-control-layers-overlays'));
+                const titleIBGE = document.createElement('h5');
+                titleIBGE.textContent = 'IBGE - Dados Abertos';
+                camadasList.appendChild(titleIBGE);
+                camadasList.appendChild(controlIBGE.getContainer().querySelector('.leaflet-control-layers-overlays'));
 
-            aplicarCoresLabels();
-            atualizarDiagnostico();
+                const titlePMAC = document.createElement('h5');
+                titlePMAC.textContent = 'PMAC - Dados Coletados';
+                camadasList.appendChild(titlePMAC);
+                camadasList.appendChild(controlPMAC.getContainer().querySelector('.leaflet-control-layers-overlays'));
+
+                const titleZoneamentos = document.createElement('h5');
+                titleZoneamentos.textContent = 'PMAC - Zoneamentos';
+                camadasList.appendChild(titleZoneamentos);
+                camadasList.appendChild(controlZoneamentosPMAC.getContainer().querySelector('.leaflet-control-layers-overlays'));
+
+                aplicarCoresLabels();
+                atualizarDiagnostico();
+            });
         });
     });
 

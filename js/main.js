@@ -37,4 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnDarkHeader) btnDarkHeader.addEventListener('click', alternarModoEscuro);
     if (btnDarkSidebar) btnDarkSidebar.addEventListener('click', alternarModoEscuro);
+
+    document.getElementById('btnZoomCity').addEventListener('click', zoomParaCidade);
+    document.getElementById('btnPrint').addEventListener('click', imprimirMapa);
+    document.getElementById('btnHelp').addEventListener('click', mostrarAjuda);
+    document.getElementById('searchBtn').addEventListener('click', pesquisarLocal);
 });

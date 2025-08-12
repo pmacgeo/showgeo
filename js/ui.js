@@ -34,3 +34,30 @@ function alternarModoEscuro() {
 
     aplicarCoresLabels();
 }
+
+// --- Botão Zoom para cidade ---
+function zoomParaCidade() {
+    if (map) {
+        map.setView([-22.9663, -42.0278], 13);
+    }
+}
+
+// --- Botão Imprimir ---
+function imprimirMapa() {
+    window.print();
+}
+
+// --- Botão Ajuda ---
+function mostrarAjuda() {
+    alert("📖 Ajuda:\n\n- Use o botão à esquerda para abrir/fechar o menu.\n- Clique nas camadas para ativar/desativar.\n- Clique no mapa para ver coordenadas.\n- Use o botão modo escuro para alterar o tema.");
+}
+
+// --- Botão Pesquisar ---
+function pesquisarLocal() {
+    const termo = document.getElementById('searchInput').value.trim();
+    if (!termo) {
+        alert("Digite um local ou endereço para pesquisar.");
+        return;
+    }
+    alert(`Pesquisa futura para: ${termo}\n\n(Será implementada geocodificação)`);
+}
