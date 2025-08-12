@@ -362,3 +362,126 @@ body.dark-mode #camadasList label {
 body.dark-mode #camadasList label:hover {
     background: #555;      /* hover mais claro */
 }
+/* ✨ Animação no abrir/fechar menu */
+.side-menu {
+    transition: left 0.3s ease-in-out, width 0.3s ease-in-out, padding 0.3s ease-in-out, background 0.5s ease;
+}
+
+/* ✨ Gradiente animado no cabeçalho do menu */
+.side-menu h3 {
+    background: linear-gradient(270deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+    background-size: 800% 800%;
+    -webkit-animation: gradienteMenu 10s ease infinite;
+    animation: gradienteMenu 10s ease infinite;
+    color: white;
+    text-align: center;
+    padding: 8px;
+    border-radius: 6px;
+}
+@keyframes gradienteMenu {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+/* ✨ Pulsar nos títulos IBGE/PMAC */
+#camadasList h5 {
+    position: relative;
+}
+#camadasList h5::after {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background: #27ae60;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #27ae60;
+    animation: pulsar 1.5s infinite ease-in-out;
+}
+@keyframes pulsar {
+    0%, 100% { box-shadow: 0 0 6px #27ae60; transform: translateY(-50%) scale(1); }
+    50% { box-shadow: 0 0 12px #2ecc71; transform: translateY(-50%) scale(1.3); }
+}
+
+/* ✨ Marcadores coloridos nas labels */
+#camadasList label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+#camadasList label::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: var(--layer-color, #ccc);
+}
+
+/* Modo escuro refinado */
+body.dark-mode #camadasList label {
+    background: #2e2e2e;
+    color: #f0f0f0;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+body.dark-mode #camadasList label:hover {
+    background: #444;
+    transform: scale(1.02);
+}
+
+/* Ajuste indicador de status no modo escuro */
+body.dark-mode .status-indicator {
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Pulse nos indicadores do status */
+.status-indicator.success {
+    animation: sucessoPulse 2s infinite;
+}
+@keyframes sucessoPulse {
+    0%, 100% { box-shadow: 0 0 6px #27ae60; }
+    50% { box-shadow: 0 0 16px #2ecc71; }
+}
+#camadasList label::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: var(--layer-color, #ccc);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Modo escuro - ajustar borda e sombra nas bolinhas, mantendo a cor correta */
+body.dark-mode #camadasList label::before {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 6px var(--layer-color, #888);
+}
+/* ... resto do arquivo permanece igual */
+
+/* ✨ Marcadores coloridos nas labels (claro e escuro) */
+#camadasList label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+#camadasList label::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    background-color: var(--layer-color, #ccc);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+/* Modo escuro ajusta contraste */
+body.dark-mode #camadasList label::before {
+    border-color: rgba(255,255,255,0.4);
+    box-shadow: 0 0 4px var(--layer-color, #ccc);
+}

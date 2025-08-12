@@ -93,10 +93,12 @@ function criarMapa() {
                     }),
                     onEachFeature: (feature, layer) => {
                         if (feature.properties) {
-                            let content = `<div style="font-family: Arial, sans-serif; max-width: 300px;"><h4 style="color:#2c3e50;">${nomeDisplay}</h4>`;
+                            let content = `<div style="font-family: Arial, sans-serif; max-width: 300px;">
+                                <h4 style="color:#2c3e50;">${nomeDisplay}</h4>`;
                             for (const prop in feature.properties) {
                                 if (feature.properties[prop]) {
-                                    content += `<p style="margin:3px 0; font-size:12px;"><strong>${prop}:</strong> ${feature.properties[prop]}</p>`;
+                                    content += `<p style="margin:3px 0; font-size:12px;">
+                                        <strong>${prop}:</strong> ${feature.properties[prop]}</p>`;
                                 }
                             }
                             content += '</div>';
@@ -148,74 +150,96 @@ function criarMapa() {
         bairros: { color: '#e74c3c', weight: 3, opacity: 1, fillColor: '#e74c3c', fillOpacity: 0.15, dashArray: '5,5' }
     };
 
+    // Objetos para separar IBGE e PMAC
+    const overlayIBGE = {};
+    const overlayPMAC = {};
+
     Promise.all([
         carregarGeoJSONComDetalhes('uf_ibge.geojson', estilos.uf, 'Limite Estadual IBGE', 'uf'),
         carregarGeoJSONComDetalhes('limite_ibge.geojson', estilos.municipio, 'Limite Municipal IBGE', 'municipio'),
         carregarGeoJSONComDetalhes('logradouros_ibge.geojson', estilos.logradouros, 'Logradouros IBGE', 'logradouros'),
-        carregarGeoJSONComDetalhes('relevo_ibge.geojson', estilos.relevo, 'Relevo IBGE', 'relevo'),
-        // carregarGeoJSONComDetalhes('bairros_ibge.geojson', estilos.bairros, 'Bairros IBGE', 'bairros')
-    ]).then(layers => {
-        const baseMaps = {
-            "🗺️ OpenStreetMap": openStreetMap,
-            "🛰️ Imagem de Satélite": satelliteLayer,
-            "🌅 Carto Light": cartoLight,
-            "🌃️ Carto Dark": cartoDark
-        };
+        carregarGeoJSONComDetalhes('relevo_ibge.geojson', estilos.relevo, 'Relevo IBGE', 'relevo')
+    ]).then(layersIBGE => {
 
-        const overlayMaps = {};
-        const nomesCamadas = ['🗾 Limite Estadual', '🗺️ Limite Municipal', '🛣️ Logradouros', '⛰️ Relevo'];
-
-        layers.forEach((layer, idx) => {
-            if (layer) {
-                overlayMaps[nomesCamadas[idx]] = layer;
-                console.log(`Camada adicionada: ${nomesCamadas[idx]}`);
-            }
+        // Preenche o grupo IBGE
+        const nomesCamadasIBGE = ['🗾 Limite Estadual', '🗺️ Limite Municipal', '🛣️ Logradouros', '⛰️ Relevo'];
+        layersIBGE.forEach((layer, idx) => {
+            if (layer) overlayIBGE[nomesCamadasIBGE[idx]] = layer;
         });
 
-        const layerControl = L.control.layers(baseMaps, overlayMaps, { collapsed: false });
-        // Adiciona ao mapa para inicializar corretamente
-        layerControl.addTo(map);
+        // Agora carrega PMAC
+        Promise.all([
+            carregarGeoJSONComDetalhes('pmac_dados1.geojson', { color: '#e67e22', weight: 3, opacity: 0.9, fillColor:'#e67e22', fillOpacity:0.4 }, 'PMAC Dados 1', 'pmac1'),
+            carregarGeoJSONComDetalhes('pmac_dados2.geojson', { color: '#c0392b', weight: 3, opacity: 0.9, fillColor:'#c0392b', fillOpacity:0.4 }, 'PMAC Dados 2', 'pmac2')
+            // Adicione mais arquivos .geojson de PMAC aqui
+        ]).then(layersPMAC => {
 
-        // Container do controle
-        const controlContainer = layerControl.getContainer();
-        // Move o container do controle para o menu lateral
-        const camadasList = document.getElementById('camadasList');
-        camadasList.innerHTML = ''; // limpa antes
-        camadasList.appendChild(controlContainer);
+            const nomesCamadasPMAC = ['📍 PMAC Dados 1', '📍 PMAC Dados 2'];
+            layersPMAC.forEach((layer, idx) => {
+                if (layer) overlayPMAC[nomesCamadasPMAC[idx]] = layer;
+            });
 
-        // Adiciona as camadas automaticamente
-        // ['uf', 'municipio', 'logradouros', 'relevo'].forEach(tipo => {
-        //     if (camadasPorTipo[tipo]) camadasPorTipo[tipo].addTo(map);
-        // });
+            const baseMaps = {
+                "🗺️ OpenStreetMap": openStreetMap,
+                "🛰️ Imagem de Satélite": satelliteLayer,
+                "🌅 Carto Light": cartoLight,
+                "🌃️ Carto Dark": cartoDark
+            };
 
-        // Reorganizar como Item/Subitem (títulos separados)
-        const baseSection = controlContainer.querySelector('.leaflet-control-layers-base');
-        const overlaySection = controlContainer.querySelector('.leaflet-control-layers-overlays');
-        if (baseSection) {
+            // Controles separados
+            const controlIBGE = L.control.layers(baseMaps, overlayIBGE, { collapsed: false });
+            const controlPMAC = L.control.layers(null, overlayPMAC, { collapsed: false });
+
+            controlIBGE.addTo(map);
+            controlPMAC.addTo(map);
+
+            // Reorganiza no menu lateral
+            const camadasList = document.getElementById('camadasList');
+            camadasList.innerHTML = '';
+
             const titleBase = document.createElement('h5');
             titleBase.textContent = 'Mapas Base';
-            // Só insere se baseSection estiver dentro do container
-            if (controlContainer.contains(baseSection)) {
-                baseSection.parentNode.insertBefore(titleBase, baseSection);
-            } else {
-                controlContainer.appendChild(titleBase);
-            }
-        }
-        if (overlaySection) {
-            const titleOverlay = document.createElement('h5');
-            titleOverlay.textContent = 'Camadas Extras';
-            // Só insere se overlaySection estiver no container
-            if (controlContainer.contains(overlaySection)) {
-                overlaySection.parentNode.insertBefore(titleOverlay, overlaySection);
-            } else {
-                controlContainer.appendChild(titleOverlay);
-            }
-        }
+            camadasList.appendChild(titleBase);
+            camadasList.appendChild(controlIBGE.getContainer().querySelector('.leaflet-control-layers-base'));
 
-        atualizarDiagnostico();
+            const titleIBGE = document.createElement('h5');
+            titleIBGE.textContent = 'IBGE - Dados Abertos';
+            camadasList.appendChild(titleIBGE);
+            camadasList.appendChild(controlIBGE.getContainer().querySelector('.leaflet-control-layers-overlays'));
+
+            const titlePMAC = document.createElement('h5');
+            titlePMAC.textContent = 'PMAC - Dados Coletados';
+            camadasList.appendChild(titlePMAC);
+            camadasList.appendChild(controlPMAC.getContainer().querySelector('.leaflet-control-layers-overlays'));
+
+            // 🔹 Aplica cores às labels automaticamente
+            document.querySelectorAll('#camadasList label').forEach(lbl => {
+                const txt = lbl.textContent.trim();
+                if (txt.includes('Limite Estadual')) {
+                    lbl.style.setProperty('--layer-color', '#2980b9');
+                }
+                if (txt.includes('Limite Municipal')) {
+                    lbl.style.setProperty('--layer-color', '#27ae60');
+                }
+                if (txt.includes('Logradouros')) {
+                    lbl.style.setProperty('--layer-color', '#f39c12');
+                }
+                if (txt.includes('Relevo')) {
+                    lbl.style.setProperty('--layer-color', '#8b4513');
+                }
+                if (txt.includes('PMAC Dados 1')) {
+                    lbl.style.setProperty('--layer-color', '#e67e22');
+                }
+                if (txt.includes('PMAC Dados 2')) {
+                    lbl.style.setProperty('--layer-color', '#c0392b');
+                }
+            });
+
+            atualizarDiagnostico();
+        });
     });
 
-    // Bônus: escala e clique para mostrar coordenadas
+    // Escala e clique para coordenadas
     L.control.scale({ position: 'bottomleft', metric: true, imperial: false }).addTo(map);
     map.on('click', e => {
         L.popup()
@@ -229,6 +253,40 @@ function criarMapa() {
     });
 }
 
+function aplicarCoresLabels() {
+    // Cores camadas IBGE e PMAC
+    document.querySelectorAll('#camadasList label').forEach(lbl => {
+        const txt = lbl.textContent.trim();
+        if (txt.includes('Limite Estadual')) {
+            lbl.style.setProperty('--layer-color', '#2980b9');
+        } else if (txt.includes('Limite Municipal')) {
+            lbl.style.setProperty('--layer-color', '#27ae60');
+        } else if (txt.includes('Logradouros')) {
+            lbl.style.setProperty('--layer-color', '#f39c12');
+        } else if (txt.includes('Relevo')) {
+            lbl.style.setProperty('--layer-color', '#8b4513');
+        } else if (txt.includes('PMAC Dados 1')) {
+            lbl.style.setProperty('--layer-color', '#e67e22');
+        } else if (txt.includes('PMAC Dados 2')) {
+            lbl.style.setProperty('--layer-color', '#c0392b');
+        }
+    });
+
+    // Cores mapas base
+    document.querySelectorAll('.leaflet-control-layers-base label').forEach(lbl => {
+        const txt = lbl.textContent.trim();
+        if (txt.includes('OpenStreetMap')) {
+            lbl.style.setProperty('--layer-color', '#7db817');
+        } else if (txt.includes('Satélite')) {
+            lbl.style.setProperty('--layer-color', '#448aff');
+        } else if (txt.includes('Carto Light')) {
+            lbl.style.setProperty('--layer-color', '#f1c40f');
+        } else if (txt.includes('Carto Dark')) {
+            lbl.style.setProperty('--layer-color', '#34495e');
+        }
+    });
+}
+
 function alternarModoEscuro() {
     document.body.classList.toggle('dark-mode');
     map.eachLayer(layer => map.removeLayer(layer));
@@ -239,13 +297,20 @@ function alternarModoEscuro() {
     }
     Object.values(camadasPorTipo).forEach(camada => camada?.addTo(map));
 
-    document.getElementById('toggleDarkMode').textContent = document.body.classList.contains('dark-mode') ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+    if (document.getElementById('toggleDarkMode'))
+        document.getElementById('toggleDarkMode').textContent =
+            document.body.classList.contains('dark-mode') ? '☀️ Modo Claro' : '🌙 Modo Escuro';
+
     const sidebarBtn = document.getElementById('toggleDarkModeSidebar');
-    if (sidebarBtn) sidebarBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️ Alternar Modo Claro' : '🌙 Alternar Modo Escuro';
+    if (sidebarBtn)
+        sidebarBtn.textContent =
+            document.body.classList.contains('dark-mode') ? '☀️ Alternar Modo Claro' : '🌙 Alternar Modo Escuro';
+
+    aplicarCoresLabels(); // reaplica cores sempre
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Abrir no desktop, fechar no mobile
+    // Começa aberto no desktop, fechado no mobile
     if (window.innerWidth >= 769) {
         document.body.classList.add('menu-open');
         document.getElementById('sideMenu').classList.add('open');
@@ -267,25 +332,13 @@ document.addEventListener('DOMContentLoaded', () => {
     hamburgerBtn.addEventListener('click', () => {
         const aberto = sideMenu.classList.toggle('open');
         sideMenu.classList.toggle('closed', !aberto);
-
-        // adiciona ou remove no body para acionar o CSS de margin no mapa
         document.body.classList.toggle('menu-open', aberto);
-        // Alternar ícone hamburger / X
         hamburgerBtn.textContent = aberto ? '✖' : '☰';
     });
 
     const btnDarkHeader = document.getElementById('toggleDarkMode');
     const btnDarkSidebar = document.getElementById('toggleDarkModeSidebar');
 
-    if (btnDarkHeader) {
-        btnDarkHeader.addEventListener('click', alternarModoEscuro);
-    }
-    if (btnDarkSidebar) {
-        btnDarkSidebar.addEventListener('click', alternarModoEscuro);
-    }
-
-    // Botão modo escuro no header
-    document.getElementById('toggleDarkMode').addEventListener('click', alternarModoEscuro);
-    // Botão modo escuro no menu lateral
-    document.getElementById('toggleDarkModeSidebar').addEventListener('click', alternarModoEscuro);
+    if (btnDarkHeader) btnDarkHeader.addEventListener('click', alternarModoEscuro);
+    if (btnDarkSidebar) btnDarkSidebar.addEventListener('click', alternarModoEscuro);
 });
