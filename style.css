@@ -310,3 +310,55 @@ body {
     height: 700px;
     width: 100%;
 }
+/* Força menu lateral fechado no mobile já no carregamento */
+@media (max-width: 768px) {
+    .side-menu {
+        left: -100% !important;
+        width: 0 !important;
+        padding: 0 !important;
+    }
+    .side-menu.open {
+        left: 0 !important;
+        width: 100% !important;
+        padding: 20px !important;
+    }
+    body.menu-open .side-menu {
+        left: 0 !important;
+        width: auto !important;
+        padding: 20px !important;
+    }
+}
+/* Garante que o menu sempre inicie fechado */
+/*.side-menu {*/
+/*    left: -100% !important;*/
+/*    width: 0 !important;*/
+/*    padding: 0 !important;*/
+/*}*/
+/*.side-menu.open {*/
+/*    left: 0 !important;*/
+/*    width: 250px !important; !* 250px se desktop ou 100% se mobile *!*/
+/*    padding: 20px !important;*/
+/*}*/
+/*body.menu-open .side-menu {*/
+/*    left: 0 !important;*/
+/*    width: 250px !important; !* 250px se desktop ou 100% se mobile *!*/
+/*    padding: 20px !important;*/
+/*}*/
+
+/* Modo escuro para títulos de seção dentro do menu */
+body.dark-mode #camadasList h5 {
+    color: #eee;           /* texto claro */
+    border-bottom: 1px solid #444; /* separador opcional */
+    padding-bottom: 4px;
+    margin-top: 10px;
+}
+
+/* Modo escuro para labels de camadas */
+body.dark-mode #camadasList label {
+    background: #3a3a3a;   /* fundo escuro */
+    color: #eee;           /* texto claro */
+}
+
+body.dark-mode #camadasList label:hover {
+    background: #555;      /* hover mais claro */
+}

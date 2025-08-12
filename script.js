@@ -245,6 +245,18 @@ function alternarModoEscuro() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Abrir no desktop, fechar no mobile
+    if (window.innerWidth >= 769) {
+        document.body.classList.add('menu-open');
+        document.getElementById('sideMenu').classList.add('open');
+        document.getElementById('hamburgerBtn').textContent = '✖';
+    } else {
+        document.body.classList.remove('menu-open');
+        document.getElementById('sideMenu').classList.remove('open');
+        document.getElementById('sideMenu').classList.add('closed');
+        document.getElementById('hamburgerBtn').textContent = '☰';
+    }
+
     inicializarMapa();
     setInterval(atualizarDiagnostico, 2000);
 
