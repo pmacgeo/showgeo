@@ -6,7 +6,17 @@
     <title>Mapa de Arraial do Cabo - RJ | SIRGAS 2000</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="style.css" />
+
+    <!-- CSS organizado -->
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/layout.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/sidebar.css" />
+    <link rel="stylesheet" href="css/map.css" />
+    <link rel="stylesheet" href="css/diagnostico.css" />
+    <link rel="stylesheet" href="css/themes.css" />
+    <link rel="stylesheet" href="css/animations.css" />
+
 </head>
 <body> <!-- class="menu-open" -->
 
@@ -45,11 +55,26 @@
 <div id="statusIndicator" class="status-indicator loading">Carregando mapa...</div>
 
 <!-- Cabeçalho -->
-<div class="header">
-    <h2>Mapa Georreferenciado de Arraial do Cabo - RJ</h2>
-    <p>Sistema de Referência: SIRGAS 2000 (EPSG:4674)</p>
-<!--    <button id="toggleDarkMode" class="toggle-dark">🌙 Modo Escuro</button>-->
-</div>
+<!--<div class="header">-->
+<!--    <h2>Mapa Georreferenciado de Arraial do Cabo - RJ</h2>-->
+<!--    <p>Sistema de Referência: SIRGAS 2000 (EPSG:4674)</p>-->
+<!--</div>-->
+
+<header id="topBar" class="top-bar">
+    <div class="logo">
+        <h1>Mapa Arraial do Cabo</h1>
+    </div>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Pesquisar endereço ou local…" />
+        <button id="searchBtn" title="Pesquisar">🔍</button>
+    </div>
+    <div class="quick-buttons">
+        <button id="btnZoomCity" title="Zoom para a cidade">🏙️</button>
+        <button id="btnPrint" title="Imprimir mapa">🖨️</button>
+        <button id="btnHelp" title="Ajuda">❓</button>
+    </div>
+</header>
+
 
 <!-- Mapa -->
 <div class="container">
@@ -59,7 +84,11 @@
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="script.js"></script>
+<script src="js/diagnostico.js"></script>
+<script src="js/geojson-loader.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,26 @@
+/* ================================
+   ANIMAÇÕES E EFEITOS
+   ================================ */
+
+/* Gradiente animado no título do menu */
+@keyframes gradienteMenu {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
+}
+
+.side-menu h3 {
+    background: linear-gradient(270deg, #3498db, #2ecc71, #f39c12, #e74c3c);
+    background-size: 800% 800%;
+    animation: gradienteMenu 10s ease infinite;
+    color: white;
+}
+
+/* Pulso no status */
+@keyframes sucessoPulse {
+    0%, 100% { box-shadow: 0 0 6px #27ae60; }
+    50% { box-shadow: 0 0 16px #2ecc71; }
+}
+.status-indicator.success {
+    animation: sucessoPulse 2s infinite;
+}

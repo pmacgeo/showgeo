@@ -1,0 +1,26 @@
+/* ================================
+   RESET E VARIÁVEIS GLOBAIS
+   ================================ */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Fonte padrão e antialiasing */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Variáveis de cor e tamanho */
+:root {
+    --cor-primaria: #3498db;
+    --cor-secundaria: #2c3e50;
+    --cor-fundo-claro: #ffffff;
+    --cor-fundo-escuro: #1e1e1e;
+    --altura-topbar: 50px;
+}

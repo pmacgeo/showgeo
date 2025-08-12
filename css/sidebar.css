@@ -1,0 +1,32 @@
+/* ================================
+   MENU LATERAL
+   ================================ */
+
+.side-menu {
+    position: fixed;
+    top: var(--altura-topbar);
+    left: 0;
+    width: 250px;
+    height: calc(100% - var(--altura-topbar));
+    background: white;
+    border-right: 2px solid #ccc;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    transition: left 0.3s ease;
+    overflow-y: auto;
+    z-index: 10000;
+}
+
+/* Estados aberto/fechado */
+.side-menu.open { left: 0; }
+.side-menu.closed { left: -250px; }
+
+/* Botão hambúrguer */
+.hamburger-btn {
+    background: var(--cor-primaria);
+    color: white;
+    font-size: 1.5em;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}

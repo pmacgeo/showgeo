@@ -1,0 +1,23 @@
+/* ================================
+   MAPA E CONTROLES DE CAMADA
+   ================================ */
+
+.map-container {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+#map {
+    height: 700px;
+    width: 100%;
+}
+
+#camadasList label {
+    display: block;
+    padding: 5px;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    background: #ecf0f1;
+}

@@ -1,0 +1,22 @@
+/* ================================
+   MODO ESCURO
+   ================================ */
+
+body.dark-mode {
+    background: var(--cor-fundo-escuro);
+    color: #ddd;
+}
+
+body.dark-mode .top-bar {
+    background: #000;
+}
+
+body.dark-mode .side-menu {
+    background: #2c2c2c;
+    color: #eee;
+}
+
+body.dark-mode #camadasList label {
+    background: #2e2e2e;
+    color: #f0f0f0;
+}
