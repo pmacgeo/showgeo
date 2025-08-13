@@ -1,6 +1,6 @@
-/* ================================
+/* ======
    MODO ESCURO
-   ================================ */
+   ========== */
 
 body.dark-mode {
     background: var(--cor-fundo-escuro);
@@ -16,7 +16,29 @@ body.dark-mode .side-menu {
     color: #eee;
 }
 
-body.dark-mode #camadasList label {
-    background: #2e2e2e;
-    color: #f0f0f0;
+/* Ajuste para os botões de camadas no modo escuro */
+body.dark-mode #grupoBase label,
+body.dark-mode #grupoIBGE label,
+body.dark-mode #grupoPMAC label {
+    background: #3a3a3a;       /* fundo mais escuro */
+    color: #f0f0f0;            /* texto claro */
+    border-radius: 4px;
+    display: block;
+    padding: 5px;
+    margin-bottom: 3px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Hover no modo escuro */
+body.dark-mode #grupoBase label:hover,
+body.dark-mode #grupoIBGE label:hover,
+body.dark-mode #grupoPMAC label:hover {
+    background: #505050;
+}
+
+/* Mantém a borda colorida das camadas no modo escuro */
+body.dark-mode #grupoBase label[style*="border-left"],
+body.dark-mode #grupoIBGE label[style*="border-left"],
+body.dark-mode #grupoPMAC label[style*="border-left"] {
+    background: #3a3a3a;
 }
