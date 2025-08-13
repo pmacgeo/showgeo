@@ -4,83 +4,90 @@ function preencherGruposNoMenu(baseIBGE, basePMAC) {
     const grupoIBGE = document.getElementById('grupoIBGE');
     const grupoPMAC = document.getElementById('grupoPMAC');
 
-    // Mapas base
+    // 1 — Radios para mapas base + opção nenhum
+    adicionarRadioBase(grupoBase, 'Nenhum mapa base', null);
     [
         { nome: 'OpenStreetMap', layer: openStreetMap },
         { nome: 'Imagem de Satélite', layer: satelliteLayer },
         { nome: 'Carto Light', layer: cartoLight },
         { nome: 'Carto Dark', layer: cartoDark }
-    ].forEach(b => adicionarCheckboxLayer(grupoBase, b.nome, b.layer));
+    ].forEach(b => adicionarRadioBase(grupoBase, b.nome, b.layer));
 
-    // IBGE - dados abertos
+    // 2 — IBGE com cor nos labels
+    const coresIBGE = {
+        'Limite Estadual': '#2980b9',
+        'Limite Municipal': '#27ae60',
+        'Logradouros': '#f39c12',
+        'Relevo': '#8b4513'
+    };
     Object.entries(baseIBGE).forEach(([nome, layer]) => {
-        adicionarCheckboxLayer(grupoIBGE, nome, layer);
+        adicionarCheckboxLayer(grupoIBGE, nome, layer, false, coresIBGE[nome]);
     });
 
-    // PMAC - dados coletados (zoneamentos)
+    // Zoneamentos (PMAC)
     Object.entries(basePMAC).forEach(([nome, layer]) => {
         adicionarCheckboxLayer(grupoPMAC, nome, layer, true);
     });
 
-    // Botão para ativar/desativar todos os zoneamentos
-    const btnToggle = document.getElementById('toggleAllZoneamentos');
-    btnToggle.addEventListener('click', () => {
+    // 3 — Botão zoneamentos sincroniza checkboxes
+    document.getElementById('toggleAllZoneamentos').addEventListener('click', () => {
+        const checkboxes = grupoPMAC.querySelectorAll('input[type=checkbox]');
         const algumAtivo = Object.values(basePMAC).some(l => map.hasLayer(l));
-        Object.values(basePMAC).forEach(layer => {
-            if (algumAtivo) map.removeLayer(layer);
-            else layer.addTo(map);
+        Object.values(basePMAC).forEach((layer, idx) => {
+            if (algumAtivo) {
+                map.removeLayer(layer);
+                checkboxes[idx].checked = false;
+            } else {
+                layer.addTo(map);
+                checkboxes[idx].checked = true;
+            }
         });
     });
 }
 
-function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false) {
+function adicionarRadioBase(container, nome, layer) {
     const label = document.createElement('label');
-    label.style.display = 'flex';
-    label.style.alignItems = 'center';
-    label.style.gap = '6px';
+    const radio = document.createElement('input');
+    radio.type = 'radio';
+    radio.name = 'mapBase';
+    radio.addEventListener('change', () => {
+        [openStreetMap, satelliteLayer, cartoLight, cartoDark].forEach(l => map.removeLayer(l));
+        if (layer) layer.addTo(map);
+    });
+    label.appendChild(radio);
+    label.appendChild(document.createTextNode(' ' + nome));
+    container.appendChild(label);
+}
 
+function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, cor = null) {
+    const label = document.createElement('label');
     const check = document.createElement('input');
     check.type = 'checkbox';
     check.checked = map.hasLayer(layer);
-
     check.addEventListener('change', () => {
         if (check.checked) layer.addTo(map);
         else map.removeLayer(layer);
     });
-
     label.appendChild(check);
+    label.appendChild(document.createTextNode(nome));
 
-    const textNode = document.createTextNode(nome);
-    label.appendChild(textNode);
-
-    // Estilo para zoneamentos com cores diferenciadas
     if (isZoneamento) {
         const zoneamentoCores = {
-            'Zona ZCVS': '#FF7800',
-            'Zona EC': '#abcdef',
-            'Zona ZEDS': '#3498db',
-            'Zona ZEIS': '#2ecc71',
-            'Zona ZEN': '#8e44ad',
-            'Zona ZEP': '#27ae60',
-            'Zona ZH': '#c0392b',
-            'Zona ZIC': '#f39c12',
-            'Zona ZIE': '#d35400',
-            'Zona ZOC': '#1abc9c',
-            'Zona ZO': '#9b59b6',
-            'Zona ZP': '#34495e',
-            'Zona ZPORT': '#2c3e50',
-            'Zona ZPVS': '#16a085',
-            'Zona ZR': '#e74c3c',
-            'Zona ZUC': '#8e44ad',
-            'Zona ZUESP': '#2980b9',
-            'Zona ZUR2': '#7f8c8d'
+            'Zona ZCVS': '#FF7800', 'Zona EC': '#abcdef', 'Zona ZEDS': '#3498db',
+            'Zona ZEIS': '#2ecc71', 'Zona ZEN': '#8e44ad', 'Zona ZEP': '#27ae60',
+            'Zona ZH': '#c0392b', 'Zona ZIC': '#f39c12', 'Zona ZIE': '#d35400',
+            'Zona ZOC': '#1abc9c', 'Zona ZO': '#9b59b6', 'Zona ZP': '#34495e',
+            'Zona ZPORT': '#2c3e50', 'Zona ZPVS': '#16a085', 'Zona ZR': '#e74c3c',
+            'Zona ZUC': '#8e44ad', 'Zona ZUESP': '#2980b9', 'Zona ZUR2': '#7f8c8d'
         };
-        if(zoneamentoCores[nome]) {
+        if (zoneamentoCores[nome]) {
             label.style.borderLeft = `8px solid ${zoneamentoCores[nome]}`;
             label.style.paddingLeft = '8px';
         }
+    } else if (cor) {
+        label.style.borderLeft = `8px solid ${cor}`;
+        label.style.paddingLeft = '8px';
     }
-
     container.appendChild(label);
 }
 
