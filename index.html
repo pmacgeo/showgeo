@@ -16,26 +16,38 @@
     <link rel="stylesheet" href="css/diagnostico.css" />
     <link rel="stylesheet" href="css/themes.css" />
     <link rel="stylesheet" href="css/animations.css" />
-
 </head>
-<body> <!-- class="menu-open" -->
-
-<!-- Botão Hamburguer -->
+<body>
 
 <!-- Menu Lateral (aberto por padrão) -->
 <nav id="sideMenu" class="side-menu open">
-<!--    <div id="hamburgerBtn" class="hamburger-btn">☰</div>-->
     <h3>📌 Menu</h3>
 
     <!-- Botão alternar modo escuro -->
     <button id="toggleDarkModeSidebar">🌙 Alternar Modo Escuro</button>
-
     <hr />
 
     <!-- Controle de Camadas -->
     <div id="camadasContainer">
         <h4>🗂 Camadas</h4>
-        <div id="camadasList"></div>
+
+        <details open>
+            <summary>🗺️ Mapas Base</summary>
+            <div id="grupoBase"></div>
+        </details>
+
+        <details open>
+            <summary>📍 IBGE - Dados Abertos</summary>
+            <div id="grupoIBGE"></div>
+        </details>
+
+        <details open>
+            <summary>📊 PMAC - Dados Coletados</summary>
+            <button id="toggleAllZoneamentos" class="btn-small">
+                Ativar/Desativar todos os Zoneamentos
+            </button>
+            <div id="grupoPMAC"></div>
+        </details>
     </div>
 
     <hr />
@@ -59,10 +71,6 @@
     <div id="hamburgerBtn" class="hamburger-btn">☰</div>
     <div class="logo">
         <h1>Mapa Arraial do Cabo</h1>
-    </div>
-    <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Pesquisar endereço ou local…">
-        <button id="searchBtn" title="Pesquisar">🔍</button>
     </div>
     <div class="quick-buttons">
         <button id="btnZoomCity" title="Zoom para a cidade">🏙️</button>

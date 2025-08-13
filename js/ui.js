@@ -1,3 +1,89 @@
+// ui.js
+function preencherGruposNoMenu(baseIBGE, basePMAC) {
+    const grupoBase = document.getElementById('grupoBase');
+    const grupoIBGE = document.getElementById('grupoIBGE');
+    const grupoPMAC = document.getElementById('grupoPMAC');
+
+    // Mapas base
+    [
+        { nome: 'OpenStreetMap', layer: openStreetMap },
+        { nome: 'Imagem de Satélite', layer: satelliteLayer },
+        { nome: 'Carto Light', layer: cartoLight },
+        { nome: 'Carto Dark', layer: cartoDark }
+    ].forEach(b => adicionarCheckboxLayer(grupoBase, b.nome, b.layer));
+
+    // IBGE - dados abertos
+    Object.entries(baseIBGE).forEach(([nome, layer]) => {
+        adicionarCheckboxLayer(grupoIBGE, nome, layer);
+    });
+
+    // PMAC - dados coletados (zoneamentos)
+    Object.entries(basePMAC).forEach(([nome, layer]) => {
+        adicionarCheckboxLayer(grupoPMAC, nome, layer, true);
+    });
+
+    // Botão para ativar/desativar todos os zoneamentos
+    const btnToggle = document.getElementById('toggleAllZoneamentos');
+    btnToggle.addEventListener('click', () => {
+        const algumAtivo = Object.values(basePMAC).some(l => map.hasLayer(l));
+        Object.values(basePMAC).forEach(layer => {
+            if (algumAtivo) map.removeLayer(layer);
+            else layer.addTo(map);
+        });
+    });
+}
+
+function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false) {
+    const label = document.createElement('label');
+    label.style.display = 'flex';
+    label.style.alignItems = 'center';
+    label.style.gap = '6px';
+
+    const check = document.createElement('input');
+    check.type = 'checkbox';
+    check.checked = map.hasLayer(layer);
+
+    check.addEventListener('change', () => {
+        if (check.checked) layer.addTo(map);
+        else map.removeLayer(layer);
+    });
+
+    label.appendChild(check);
+
+    const textNode = document.createTextNode(nome);
+    label.appendChild(textNode);
+
+    // Estilo para zoneamentos com cores diferenciadas
+    if (isZoneamento) {
+        const zoneamentoCores = {
+            'Zona ZCVS': '#FF7800',
+            'Zona EC': '#abcdef',
+            'Zona ZEDS': '#3498db',
+            'Zona ZEIS': '#2ecc71',
+            'Zona ZEN': '#8e44ad',
+            'Zona ZEP': '#27ae60',
+            'Zona ZH': '#c0392b',
+            'Zona ZIC': '#f39c12',
+            'Zona ZIE': '#d35400',
+            'Zona ZOC': '#1abc9c',
+            'Zona ZO': '#9b59b6',
+            'Zona ZP': '#34495e',
+            'Zona ZPORT': '#2c3e50',
+            'Zona ZPVS': '#16a085',
+            'Zona ZR': '#e74c3c',
+            'Zona ZUC': '#8e44ad',
+            'Zona ZUESP': '#2980b9',
+            'Zona ZUR2': '#7f8c8d'
+        };
+        if(zoneamentoCores[nome]) {
+            label.style.borderLeft = `8px solid ${zoneamentoCores[nome]}`;
+            label.style.paddingLeft = '8px';
+        }
+    }
+
+    container.appendChild(label);
+}
+
 function aplicarCoresLabels() {
     document.querySelectorAll('#camadasList label').forEach(lbl => {
         const txt = lbl.textContent.trim();
@@ -53,11 +139,11 @@ function mostrarAjuda() {
 }
 
 // --- Botão Pesquisar ---
-function pesquisarLocal() {
-    const termo = document.getElementById('searchInput').value.trim();
-    if (!termo) {
-        alert("Digite um local ou endereço para pesquisar.");
-        return;
-    }
-    alert(`Pesquisa futura para: ${termo}\n\n(Será implementada geocodificação)`);
-}
+// function pesquisarLocal() {
+//     const termo = document.getElementById('searchInput').value.trim();
+//     if (!termo) {
+//         alert("Digite um local ou endereço para pesquisar.");
+//         return;
+//     }
+//     alert(`Pesquisa futura para: ${termo}\n\n(Será implementada geocodificação)`);
+// }
