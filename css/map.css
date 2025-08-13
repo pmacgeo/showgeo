@@ -1,12 +1,16 @@
-/* ================================
+/* ======
    MAPA E CONTROLES DE CAMADA
-   ================================ */
+   ========== */
 
 .map-container {
-    background: white;
+    background: var(--cor-fundo-claro);
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+body.dark-mode .map-container {
+    background: var(--cor-fundo-escuro);
 }
 
 #map {

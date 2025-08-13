@@ -7,13 +7,25 @@ function inicializarMapa() {
     atualizarStatus('Mapa inicializado com sucesso!', 'success');
 }
 
-// mapa.js
-function criarMapa() {
-    const centroCidade = [-22.9663, -42.0278];
-    const zoomInicial = 13;
-    map = L.map('map').setView(centroCidade, zoomInicial);
+// Marca o radio do mapa base com o nome informado
+function setRadioLayerByName(name) {
+    const radios = document.querySelectorAll('input[name="mapBase"]');
+    radios.forEach(radio => {
+        if (radio.nextSibling.textContent.trim() === name) {
+            radio.checked = true;
+        }
+    });
+}
 
-    // Layers base
+function criarMapa() {
+    // Define as coordenadas e zoom para o município conforme o botão
+    const viewMunicipio = [-22.94978, -42.080];
+    const zoomInicial = 12;
+
+    // Cria o mapa já centralizado e com o zoom desejado
+    map = L.map('map').setView(viewMunicipio, zoomInicial);
+
+    // Define as camadas base (tiles) normalmente
     openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors', maxZoom: 18
     });
@@ -27,6 +39,7 @@ function criarMapa() {
         attribution: '© OpenStreetMap/CARTO', maxZoom: 18
     });
 
+    // Adiciona a camada base inicial, por exemplo, OpenStreetMap
     openStreetMap.addTo(map);
 
     const estilos = {
@@ -75,10 +88,17 @@ function criarMapa() {
         )).then(() => {
             totalCamadas = Object.keys(overlayIBGE).length + Object.keys(overlayPMAC).length;
             preencherGruposNoMenu(overlayIBGE, overlayPMAC);
+
+            // Marca o radio do mapa base satélite após o menu estar pronto
+            setTimeout(() => {
+                setRadioLayerByName('Imagem de Satélite');
+            }, 100);
         });
     });
 
     L.control.scale({ position: 'bottomleft', metric: true }).addTo(map);
+
+    // Evento de clique no mapa comentado — pode ser ativado se quiser mostrar coordenadas clicadas
     // map.on('click', e => {
     //     L.popup()
     //         .setLatLng(e.latlng)

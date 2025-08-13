@@ -6,8 +6,38 @@ let totalCamadas = 4;
 let camadasPorTipo = {};
 let openStreetMap, satelliteLayer, cartoLight, cartoDark;
 
-// --- Inicialização ---
+// --- Função global para marcar o radio do mapa base pelo nome ---
+function setRadioLayerByName(name) {
+    const radios = document.querySelectorAll('input[name="mapBase"]');
+    radios.forEach(radio => {
+        if (radio.nextSibling.textContent.trim() === name) {
+            radio.checked = true;
+        }
+    });
+}
+
+// --- Função para iniciar o mapa já com a camada satélite ativada ---
+function inicializarMapaComSatelite() {
+    // Remove todas as camadas base ativas
+    [openStreetMap, satelliteLayer, cartoLight, cartoDark].forEach(layer => {
+        if (map.hasLayer(layer)) {
+            map.removeLayer(layer);
+        }
+    });
+    // Adiciona a camada satélite
+    satelliteLayer.addTo(map);
+    // Marca o rádio "Imagem de Satélite"
+    setRadioLayerByName('Imagem de Satélite');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Inicializa o mapa (função deve estar definida em js/mapa.js)
+    inicializarMapa();
+
+    // Aguarda um pouco para garantir que o mapa esteja criado, depois ativa satélite e marca rádio
+    setTimeout(inicializarMapaComSatelite, 300);
+
+    // Controle da abertura do menu lateral conforme tamanho da tela
     if (window.innerWidth >= 769) {
         document.body.classList.add('menu-open');
         document.getElementById('sideMenu').classList.add('open');
@@ -19,12 +49,12 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('hamburgerBtn').textContent = '☰';
     }
 
-    inicializarMapa();
+    // Atualiza diagnóstico a cada 2 segundos (função em js/diagnostico.js)
     setInterval(atualizarDiagnostico, 2000);
 
+    // Menu lateral - botão hambúrguer
     const sideMenu = document.getElementById('sideMenu');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
-
     hamburgerBtn.addEventListener('click', () => {
         const aberto = sideMenu.classList.toggle('open');
         sideMenu.classList.toggle('closed', !aberto);
@@ -32,12 +62,13 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburgerBtn.textContent = aberto ? '✖' : '☰';
     });
 
+    // Botões modo escuro no header e sidebar (função alternarModoEscuro deve estar em js/ui.js)
     const btnDarkHeader = document.getElementById('toggleDarkMode');
     const btnDarkSidebar = document.getElementById('toggleDarkModeSidebar');
-
     if (btnDarkHeader) btnDarkHeader.addEventListener('click', alternarModoEscuro);
     if (btnDarkSidebar) btnDarkSidebar.addEventListener('click', alternarModoEscuro);
 
+    // Ações dos botões zoom, imprimir, ajuda e pesquisar
     document.getElementById('btnZoomCity').addEventListener('click', zoomParaCidade);
     document.getElementById('btnPrint').addEventListener('click', imprimirMapa);
     document.getElementById('btnHelp').addEventListener('click', mostrarAjuda);

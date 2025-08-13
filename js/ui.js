@@ -1,4 +1,3 @@
-// ui.js
 function preencherGruposNoMenu(baseIBGE, basePMAC) {
     const grupoBase = document.getElementById('grupoBase');
     const grupoIBGE = document.getElementById('grupoIBGE');
@@ -111,46 +110,53 @@ function aplicarCoresLabels() {
     });
 }
 
+// Troca somente o mapa base no dark mode sem tocar nas outras camadas
 function alternarModoEscuro() {
     document.body.classList.toggle('dark-mode');
-    map.eachLayer(layer => map.removeLayer(layer));
+
+    // Remove apenas as camadas base
+    [openStreetMap, satelliteLayer, cartoLight, cartoDark].forEach(l => {
+        if (map.hasLayer(l)) {
+            map.removeLayer(l);
+        }
+    });
+
+    // Adiciona o tile base conforme o modo
     if (document.body.classList.contains('dark-mode')) {
         cartoDark.addTo(map);
+        setRadioLayerByName('Carto Dark');
     } else {
-        openStreetMap.addTo(map);
+        cartoLight.addTo(map);
+        setRadioLayerByName('Carto Light');
     }
-    Object.values(camadasPorTipo).forEach(camada => camada?.addTo(map));
 
+    // Atualiza texto do botão na sidebar
     const sidebarBtn = document.getElementById('toggleDarkModeSidebar');
-    if (sidebarBtn)
-        sidebarBtn.textContent = document.body.classList.contains('dark-mode') ? '☀️ Alternar Modo Claro' : '🌙 Alternar Modo Escuro';
+    if (sidebarBtn) {
+        sidebarBtn.textContent = document.body.classList.contains('dark-mode')
+            ? '☀️ Alternar Modo Claro'
+            : '🌙 Alternar Modo Escuro';
+    }
 
     aplicarCoresLabels();
 }
 
-// --- Botão Zoom para cidade ---
+// Botão Zoom para cidade (ajuste mapa.setView conforme necessidade)
 function zoomParaCidade() {
     if (map) {
-        map.setView([-22.9663, -42.0278], 13);
+        map.setView([-22.94978, -42.080], 12);
     }
 }
 
-// --- Botão Imprimir ---
+// Funções extras para imprimir, ajuda e futura pesquisa
 function imprimirMapa() {
     window.print();
 }
 
-// --- Botão Ajuda ---
 function mostrarAjuda() {
     alert("📖 Ajuda:\n\n- Use o botão à esquerda para abrir/fechar o menu.\n- Clique nas camadas para ativar/desativar.\n- Clique no mapa para ver coordenadas.\n- Use o botão modo escuro para alterar o tema.");
 }
 
-// --- Botão Pesquisar ---
-// function pesquisarLocal() {
-//     const termo = document.getElementById('searchInput').value.trim();
-//     if (!termo) {
-//         alert("Digite um local ou endereço para pesquisar.");
-//         return;
-//     }
-//     alert(`Pesquisa futura para: ${termo}\n\n(Será implementada geocodificação)`);
-// }
+function pesquisarLocal() {
+    alert("Função de pesquisa será implementada futuramente.");
+}
