@@ -11,7 +11,7 @@ function atualizarStatus(mensagem, tipo = 'loading') {
 }
 
 function atualizarDiagnostico() {
-    document.getElementById('statusLeaflet').textContent = typeof L !== 'undefined' ? '✅ Leaflet: Carregado' : '❌ Leaflet: Erro';
+    document.getElementById('statusLeaflet').textContent = (typeof L !== 'undefined') ? '✅ Leaflet: Carregado' : '❌ Leaflet: Erro';
     document.getElementById('statusRede').textContent = navigator.onLine ? '✅ Rede: Online' : '❌ Rede: Offline';
     document.getElementById('statusMapa').textContent = map ? '✅ Mapa: Inicializado' : '❌ Mapa: Erro';
     document.getElementById('statusGeoJSON').textContent = `📁 Camadas: ${camadasCarregadas}/${totalCamadas}`;

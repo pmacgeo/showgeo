@@ -13,22 +13,18 @@ function criarMapa() {
     const zoomInicial = 13;
     map = L.map('map').setView(centroCidade, zoomInicial);
 
-    // Mapas base
+    // Layers base
     openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 18
+        attribution: '© OpenStreetMap contributors', maxZoom: 18
     });
     satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '© Esri',
-        maxZoom: 18
+        attribution: '© Esri', maxZoom: 18
     });
     cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap/CARTO',
-        maxZoom: 18
+        attribution: '© OpenStreetMap/CARTO', maxZoom: 18
     });
     cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        attribution: '© OpenStreetMap/CARTO',
-        maxZoom: 18
+        attribution: '© OpenStreetMap/CARTO', maxZoom: 18
     });
 
     openStreetMap.addTo(map);
@@ -50,11 +46,8 @@ function criarMapa() {
         carregarGeoJSONComDetalhes('geojson/ibge/relevo_ibge.geojson', estilos.relevo, 'Relevo', 'relevo')
     ]).then(layersIBGE => {
         const nomesIBGE = ['Limite Estadual', 'Limite Municipal', 'Logradouros', 'Relevo'];
-        layersIBGE.forEach((layer, idx) => {
-            if (layer) overlayIBGE[nomesIBGE[idx]] = layer;
-        });
+        layersIBGE.forEach((ly, i) => { if (ly) overlayIBGE[nomesIBGE[i]] = ly; });
 
-        // Zoneamentos dentro de PMAC - Dados Coletados
         const zoneamentoFiles = [
             { file: 'geojson/pmac-zonas/zona_zcvs.geojson', name: 'Zona ZCVS', color: '#FF7800' },
             { file: 'geojson/pmac-zonas/zona_ec.geojson', name: 'Zona EC', color: '#abcdef' },
@@ -80,6 +73,7 @@ function criarMapa() {
             carregarGeoJSONComDetalhes(z.file, { color: z.color, weight: 2, fillOpacity: 0.3 }, z.name, 'pmac')
                 .then(layer => { if (layer) overlayPMAC[z.name] = layer; })
         )).then(() => {
+            totalCamadas = Object.keys(overlayIBGE).length + Object.keys(overlayPMAC).length;
             preencherGruposNoMenu(overlayIBGE, overlayPMAC);
         });
     });
