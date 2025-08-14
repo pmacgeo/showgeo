@@ -32,6 +32,16 @@ function inicializarMapaComSatelite() {
 
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializa o mapa (função deve estar definida em js/mapa.js)
+
+    // Ativa modo escuro por padrão
+    document.body.classList.add('dark-mode');
+    // Atualiza o texto do botão corretamente
+    const sidebarBtn = document.getElementById('toggleDarkModeSidebar');
+    if (sidebarBtn) {
+        sidebarBtn.textContent = '☀️ Alternar Modo Claro';
+    }
+
+    // Inicializa o mapa
     inicializarMapa();
 
     // Aguarda um pouco para garantir que o mapa esteja criado, depois ativa satélite e marca rádio
