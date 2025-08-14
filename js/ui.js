@@ -44,6 +44,21 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras) {
         });
     });
 
+    // Botão para ativar/desativar todas as câmeras PMAC
+    document.getElementById('toggleAllCameras').addEventListener('click', () => {
+        const checkboxes = grupoPMACCameras.querySelectorAll('input[type=checkbox]');
+        const algumaAtiva = Object.values(basePMACCameras).some(l => map.hasLayer(l));
+        Object.values(basePMACCameras).forEach((layer, idx) => {
+            if (algumaAtiva) {
+                map.removeLayer(layer);
+                checkboxes[idx].checked = false;
+            } else {
+                layer.addTo(map);
+                checkboxes[idx].checked = true;
+            }
+        });
+    });
+
     // Câmeras PMAC - adiciona apenas uma vez com SVG no label
     const svgUrls = {
         'Botão Pânico': 'geojson/pmac-cams/botao_panico/cake_13676147.png', //botao_panico.svg
