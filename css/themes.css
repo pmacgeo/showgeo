@@ -64,3 +64,21 @@ body.dark-mode #grupoPMACCameras label img {
     margin-right: 8px; /* mesmo espaçamento com o texto */
     vertical-align: middle;
 }
+
+body.dark-mode #grupoPMACOnibus label {
+    background: #3a3a3a;       /* fundo mais escuro */
+    color: #f0f0f0;            /* texto claro */
+    border-radius: 4px;
+    display: block;
+    margin: 4px 0;
+    padding: 3px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode #grupoPMACOnibus label:hover {
+    background: #505050;
+}
+
+body.dark-mode #grupoPMACOnibus label img {
+    filter: brightness(0) invert(1);
+}
