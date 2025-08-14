@@ -1,10 +1,10 @@
 // --- Variáveis globais ---
 const statusIndicator = document.getElementById('statusIndicator');
-let map;
+// let map;
 let camadasCarregadas = 0;
 let totalCamadas = 4;
-let camadasPorTipo = {};
-let openStreetMap, satelliteLayer, cartoLight, cartoDark;
+// let camadasPorTipo = {};
+// let openStreetMap, satelliteLayer, cartoLight, cartoDark;
 
 // --- Função global para marcar o radio do mapa base pelo nome ---
 function setRadioLayerByName(name) {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnZoomCity').addEventListener('click', zoomParaCidade);
     document.getElementById('btnPrint').addEventListener('click', imprimirMapa);
     document.getElementById('btnHelp').addEventListener('click', mostrarAjuda);
-    document.getElementById('searchBtn').addEventListener('click', pesquisarLocal);
+    // document.getElementById('searchBtn').addEventListener('click', pesquisarLocal);
 
     // Fecha o menu lateral ao clicar fora
     // document.addEventListener('click', (e) => {

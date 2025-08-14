@@ -1,8 +1,9 @@
-function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras) {
+function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnibus) {
     const grupoBase = document.getElementById('grupoBase');
     const grupoIBGE = document.getElementById('grupoIBGE');
     const grupoPMAC = document.getElementById('grupoPMAC');
     const grupoPMACCameras = document.getElementById('grupoPMACCameras');
+    const grupoPMACOnibus = document.getElementById('grupoPMACOnibus');
 
     // Radios mapas base
     adicionarRadioBase(grupoBase, 'Nenhum mapa base', null);
@@ -71,6 +72,13 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras) {
     Object.entries(basePMACCameras).forEach(([nome, layer]) => {
         adicionarCheckboxLayer(grupoPMACCameras, nome, layer, false, null, svgUrls[nome]);
     });
+
+    // Ônibus PMAC
+    if (basePMACOnibus) {
+        Object.entries(basePMACOnibus).forEach(([nome, layer]) => {
+            adicionarCheckboxLayer(grupoPMACOnibus, nome, layer, false);
+        });
+    }
 }
 
 function adicionarRadioBase(container, nome, layer) {
