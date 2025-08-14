@@ -17,6 +17,49 @@ function setRadioLayerByName(name) {
     });
 }
 
+function createSvgIcon(svgUrl) {
+    return L.icon({
+        iconUrl: svgUrl,
+        iconSize: [100, 100],  // Ajuste o tamanho conforme necessário
+        iconAnchor: [50, 50], // Centraliza o ícone no ponto
+        popupAnchor: [0, -50]
+    });
+}
+
+function carregarGeoJSONPmacCameras(geojsonPath, svgIconPath, nomeDisplay) {
+    return fetch(geojsonPath)
+        .then(response => {
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            return response.json();
+        })
+        .then(data => {
+            if (!data.features || data.features.length === 0) return null;
+
+            const icon = createSvgIcon(svgIconPath);
+
+            const layer = L.geoJSON(data, {
+                pointToLayer: (feature, latlng) => L.marker(latlng, { icon }),
+                onEachFeature: (feature, layer) => {
+                    if (feature.properties) {
+                        let popupContent = `<div style="font-family: Arial, sans-serif; max-width: 300px;">
+                                  <h4>${nomeDisplay}</h4>`;
+                        for (const prop in feature.properties) {
+                            popupContent += `<p><strong>${prop}:</strong> ${feature.properties[prop]}</p>`;
+                        }
+                        popupContent += '</div>';
+                        layer.bindPopup(popupContent);
+                    }
+                }
+            });
+
+            return layer;
+        })
+        .catch(error => {
+            console.error(`Erro ao carregar ${geojsonPath}:`, error);
+            return null;
+        });
+}
+
 function criarMapa() {
     // Define as coordenadas e zoom para o município conforme o botão
     const viewMunicipio = [-22.94978, -42.080];
@@ -51,6 +94,9 @@ function criarMapa() {
 
     const overlayIBGE = {};
     const overlayPMAC = {};
+    const overlayPMACCameras = {};
+    camadasPorTipo['pmac'] = overlayPMAC;
+    camadasPorTipo['pmac_cameras'] = overlayPMACCameras;
 
     Promise.all([
         carregarGeoJSONComDetalhes('geojson/ibge/uf_ibge.geojson', estilos.uf, 'Limite Estadual', 'uf'),
@@ -82,14 +128,27 @@ function criarMapa() {
             { file: 'geojson/pmac-zonas/zona_zur2.geojson', name: 'Zona ZUR2', color: '#7f8c8d' }
         ];
 
+        const camerasFiles = [
+            { file: 'geojson/pmac-cams/botao_panico/botao_panico.geojson', svg: 'geojson/pmac-cams/botao_panico/botao_panico.svg', name: 'Botão Pânico' },
+            { file: 'geojson/pmac-cams/cam360/camera_360.geojson', svg: 'geojson/pmac-cams/cam360/camera_360.svg', name: 'Câmera 360' },
+            { file: 'geojson/pmac-cams/comum/camera_comum.geojson', svg: 'geojson/pmac-cams/comum/camera_comum.svg', name: 'Câmera Comum' },
+            { file: 'geojson/pmac-cams/ocr/ocr.geojson', svg: 'geojson/pmac-cams/ocr/ocr.svg', name: 'OCR' },
+            { file: 'geojson/pmac-cams/rec_facial/rec_facial.geojson', svg: 'geojson/pmac-cams/rec_facial/rec_facial.svg', name: 'Reconhecimento Facial' }
+        ];
+
         return Promise.all(zoneamentoFiles.map(z =>
             carregarGeoJSONComDetalhes(z.file, { color: z.color, weight: 2, fillOpacity: 0.3 }, z.name, 'pmac')
                 .then(layer => { if (layer) overlayPMAC[z.name] = layer; })
         )).then(() => {
-            totalCamadas = Object.keys(overlayIBGE).length + Object.keys(overlayPMAC).length;
-            preencherGruposNoMenu(overlayIBGE, overlayPMAC);
+            return Promise.all(camerasFiles.map(cam =>
+                carregarGeoJSONPmacCameras(cam.file, cam.svg, cam.name)
+                    .then(layer => { if (layer) overlayPMACCameras[cam.name] = layer; })
+            ));
+        }).then(() => {
+            totalCamadas = Object.keys(overlayIBGE).length + Object.keys(overlayPMAC).length + Object.keys(overlayPMACCameras).length;
+            preencherGruposNoMenu(overlayIBGE, overlayPMAC, overlayPMACCameras);
 
-            // Marca o radio do mapa base satélite após o menu estar pronto
+            // Define o mapa base satélite após preparar o menu
             setTimeout(() => {
                 setRadioLayerByName('Imagem de Satélite');
             }, 100);
