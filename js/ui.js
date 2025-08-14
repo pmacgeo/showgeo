@@ -62,11 +62,11 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnib
 
     // Câmeras PMAC - adiciona apenas uma vez com SVG no label
     const svgUrls = {
-        'Botão Pânico': 'geojson/pmac-cams/botao_panico/cake_13676147.png', //botao_panico.svg
-        'Câmera 360': 'geojson/pmac-cams/cam360/360-camera_1623453.png', //camera_360.svg
-        'Câmera Comum': 'geojson/pmac-cams/comum/video-camera_99439.png', //camera_comum.svg
-        'OCR': 'geojson/pmac-cams/ocr/ocr_5376234.png', //ocr.svg
-        'Reconhecimento Facial': 'geojson/pmac-cams/rec_facial/masked-man_8269102.png' //rec_facial.svg
+        'Botão Pânico': 'geojson/pmac-cams/botao_panico/cake_13676147.png',
+        'Câmera 360': 'geojson/pmac-cams/cam360/360-camera_1623453.png',
+        'Câmera Comum': 'geojson/pmac-cams/comum/video-camera_99439.png',
+        'OCR': 'geojson/pmac-cams/ocr/ocr_5376234.png',
+        'Reconhecimento Facial': 'geojson/pmac-cams/rec_facial/masked-man_8269102.png'
     };
 
     Object.entries(basePMACCameras).forEach(([nome, layer]) => {
@@ -75,8 +75,10 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnib
 
     // PMAC - Ônibus com ícones diferentes para Linha e Ponto
     if (basePMACOnibus) {
+        // Limpa o container para evitar duplicações
+        grupoPMACOnibus.innerHTML = '';
+
         Object.entries(basePMACOnibus).forEach(([nome, layer]) => {
-            // Dentro da função que preenche o menu, ao percorrer os nomes das camadas de ônibus:
             let nomeExibido;
             let iconUrl = null;
 
@@ -90,9 +92,31 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnib
                 nomeExibido = nome;
             }
 
-            // Passa nomeExibido (sem a palavra inicial) para a função que adiciona o checkbox
             adicionarCheckboxLayer(grupoPMACOnibus, nomeExibido, layer, false, null, iconUrl);
         });
+
+        // Botão para ativar/desativar todos os ônibus PMAC - adicionado apenas uma vez
+        const toggleAllOnibusBtn = document.getElementById('toggleAllOnibus');
+        if (toggleAllOnibusBtn) {
+            // Remove listeners antigos e recria
+            toggleAllOnibusBtn.replaceWith(toggleAllOnibusBtn.cloneNode(true));
+            const novoBotao = document.getElementById('toggleAllOnibus');
+
+            novoBotao.addEventListener('click', () => {
+                const checkboxes = grupoPMACOnibus.querySelectorAll('input[type=checkbox]');
+                const algumAtivo = Object.values(basePMACOnibus).some(l => map.hasLayer(l));
+
+                Object.values(basePMACOnibus).forEach((layer, idx) => {
+                    if (algumAtivo) {
+                        map.removeLayer(layer);
+                        checkboxes[idx].checked = false;
+                    } else {
+                        layer.addTo(map);
+                        checkboxes[idx].checked = true;
+                    }
+                });
+            });
+        }
     }
 }
 
@@ -122,9 +146,9 @@ function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, co
 
     // Checkbox
     label.appendChild(check);
-    label.appendChild(document.createTextNode(' ')); // <-- Espaço entre botão e texto
+    label.appendChild(document.createTextNode(' '));
 
-    // Se tiver ícone (caso das câmeras)
+    // Ícone
     if (svgUrl) {
         const img = document.createElement('img');
         img.src = svgUrl;
@@ -135,10 +159,10 @@ function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, co
         label.appendChild(img);
     }
 
-    // Nome da camada
+    // Nome
     label.appendChild(document.createTextNode(nome));
 
-    // Cores nos zoneamentos ou IBGE
+    // Cores
     if (isZoneamento) {
         const zoneamentoCores = {
             'Zona ZCVS': '#FF7800', 'Zona EC': '#abcdef', 'Zona ZEDS': '#3498db',
@@ -167,8 +191,6 @@ function aplicarCoresLabels() {
         else if (txt.includes('Limite Municipal')) lbl.style.setProperty('--layer-color', '#27ae60');
         else if (txt.includes('Logradouros')) lbl.style.setProperty('--layer-color', '#f39c12');
         else if (txt.includes('Relevo')) lbl.style.setProperty('--layer-color', '#8b4513');
-        // else if (txt.includes('PMAC Dados 1')) lbl.style.setProperty('--layer-color', '#e67e22');
-        // else if (txt.includes('PMAC Dados 2')) lbl.style.setProperty('--layer-color', '#c0392b');
     });
 
     document.querySelectorAll('.leaflet-control-layers-base label').forEach(lbl => {
@@ -180,18 +202,13 @@ function aplicarCoresLabels() {
     });
 }
 
-// Troca somente o mapa base no dark mode sem tocar nas outras camadas
 function alternarModoEscuro() {
     document.body.classList.toggle('dark-mode');
-
-    // Remove apenas as camadas base
     [openStreetMap, satelliteLayer, cartoLight, cartoDark].forEach(l => {
         if (map.hasLayer(l)) {
             map.removeLayer(l);
         }
     });
-
-    // Adiciona o tile base conforme o modo
     if (document.body.classList.contains('dark-mode')) {
         cartoDark.addTo(map);
         setRadioLayerByName('Carto Dark');
@@ -199,26 +216,21 @@ function alternarModoEscuro() {
         cartoLight.addTo(map);
         setRadioLayerByName('Carto Light');
     }
-
-    // Atualiza texto do botão na sidebar
     const sidebarBtn = document.getElementById('toggleDarkModeSidebar');
     if (sidebarBtn) {
         sidebarBtn.textContent = document.body.classList.contains('dark-mode')
             ? '☀️ Alternar Modo Claro'
             : '🌙 Alternar Modo Escuro';
     }
-
     aplicarCoresLabels();
 }
 
-// Botão Zoom para cidade (ajuste mapa.setView conforme necessidade)
 function zoomParaCidade() {
     if (map) {
         map.setView([-22.94978, -42.080], 12);
     }
 }
 
-// Funções extras para imprimir, ajuda e futura pesquisa
 function imprimirMapa() {
     window.print();
 }
