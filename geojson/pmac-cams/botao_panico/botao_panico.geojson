@@ -1,0 +1,22 @@
+{
+"type": "FeatureCollection",
+"name": "botao_do_panico",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:EPSG::4674" } },
+"features": [
+{ "type": "Feature", "properties": { "ogc_fid": 1, "fid": 1, "x": -42.017523369777003, "y": -22.9705717981121 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.017523369777003, -22.9705717981121 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 2, "fid": 2, "x": -42.034179181136601, "y": -22.965592236954599 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.034179181136601, -22.965592236954599 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 3, "fid": 3, "x": -42.031399220957098, "y": -22.973042231600299 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.031399220957098, -22.973042231600299 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 4, "fid": 6, "x": -42.031362614013702, "y": -22.969838160715 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.031362614013702, -22.969838160715 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 5, "fid": 7, "x": -42.0213297950365, "y": -22.974860786526101 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.0213297950365, -22.974860786526101 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 6, "fid": 8, "x": -42.024793594360403, "y": -22.9723678931698 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.024793594360403, -22.9723678931698 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 7, "fid": 9, "x": -42.025783908512501, "y": -22.969415254185002 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.025783908512501, -22.969415254185002 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 8, "fid": 10, "x": -42.024646203246299, "y": -22.9683507628055 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.024646203246299, -22.9683507628055 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 9, "fid": 11, "x": -42.033485816728998, "y": -22.947132222420699 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.033485816728998, -22.947132222420699 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 10, "fid": 12, "x": -42.022745050542703, "y": -22.961151718390099 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.022745050542703, -22.961151718390099 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 11, "fid": 13, "x": -42.025162553815903, "y": -22.959271759180002 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.025162553815903, -22.959271759180002 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 12, "fid": 14, "x": -42.0148936118227, "y": -22.9895456359821 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.0148936118227, -22.9895456359821 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 13, "fid": 15, "x": -42.013476027980801, "y": -22.9897369244574 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.013476027980801, -22.9897369244574 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 14, "fid": 16, "x": -42.020599209322803, "y": -22.970173644084198 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.020599209322803, -22.970173644084198 ] ] } },
+{ "type": "Feature", "properties": { "ogc_fid": 15, "fid": 17, "x": -42.024231966781798, "y": -22.967746025734598 }, "geometry": { "type": "MultiPoint", "coordinates": [ [ -42.024231966781798, -22.967746025734598 ] ] } }
+]
+}
