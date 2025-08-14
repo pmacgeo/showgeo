@@ -31,11 +31,9 @@ function inicializarMapaComSatelite() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializa o mapa (função deve estar definida em js/mapa.js)
-
     // Ativa modo escuro por padrão
     document.body.classList.add('dark-mode');
-    // Atualiza o texto do botão corretamente
+
     const sidebarBtn = document.getElementById('toggleDarkModeSidebar');
     if (sidebarBtn) {
         sidebarBtn.textContent = '☀️ Alternar Modo Claro';
@@ -44,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inicializa o mapa
     inicializarMapa();
 
-    // Aguarda um pouco para garantir que o mapa esteja criado, depois ativa satélite e marca rádio
+    // Aguarda para garantir que o mapa esteja criado, depois ativa o satélite
     setTimeout(inicializarMapaComSatelite, 300);
 
     // Controle da abertura do menu lateral conforme tamanho da tela
@@ -59,12 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('hamburgerBtn').textContent = '☰';
     }
 
-    // Atualiza diagnóstico a cada 2 segundos (função em js/diagnostico.js)
+    // Atualiza diagnóstico a cada 2 segundos
     setInterval(atualizarDiagnostico, 2000);
 
-    // Menu lateral - botão hambúrguer
+    // Botão hambúrguer do menu lateral
     const sideMenu = document.getElementById('sideMenu');
     const hamburgerBtn = document.getElementById('hamburgerBtn');
+
     hamburgerBtn.addEventListener('click', () => {
         const aberto = sideMenu.classList.toggle('open');
         sideMenu.classList.toggle('closed', !aberto);
@@ -72,15 +71,26 @@ document.addEventListener('DOMContentLoaded', () => {
         hamburgerBtn.textContent = aberto ? '✖' : '☰';
     });
 
-    // Botões modo escuro no header e sidebar (função alternarModoEscuro deve estar em js/ui.js)
+    // Botões de modo escuro
     const btnDarkHeader = document.getElementById('toggleDarkMode');
     const btnDarkSidebar = document.getElementById('toggleDarkModeSidebar');
     if (btnDarkHeader) btnDarkHeader.addEventListener('click', alternarModoEscuro);
     if (btnDarkSidebar) btnDarkSidebar.addEventListener('click', alternarModoEscuro);
 
-    // Ações dos botões zoom, imprimir, ajuda e pesquisar
+    // Botões de ação do mapa
     document.getElementById('btnZoomCity').addEventListener('click', zoomParaCidade);
     document.getElementById('btnPrint').addEventListener('click', imprimirMapa);
     document.getElementById('btnHelp').addEventListener('click', mostrarAjuda);
     document.getElementById('searchBtn').addEventListener('click', pesquisarLocal);
+
+    // Fecha o menu lateral ao clicar fora
+    // document.addEventListener('click', (e) => {
+    //     const clicouFora = !sideMenu.contains(e.target) && !hamburgerBtn.contains(e.target);
+    //     if (sideMenu.classList.contains('open') && clicouFora) {
+    //         sideMenu.classList.remove('open');
+    //         sideMenu.classList.add('closed');
+    //         document.body.classList.remove('menu-open');
+    //         hamburgerBtn.textContent = '☰';
+    //     }
+    // });
 });
