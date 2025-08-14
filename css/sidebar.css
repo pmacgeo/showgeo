@@ -6,8 +6,8 @@
     position: fixed;
     top: var(--altura-topbar);
     left: 0;
-    width: 270px; /* um pouco mais largo */
-    min-width: 250px;
+    width: 320px; /* um pouco mais largo */
+    min-width: 300px;
     height: calc(100% - var(--altura-topbar));
     background: white;
     border-right: 2px solid #ccc;
@@ -20,7 +20,7 @@
 
 /* Estados aberto/fechado */
 .side-menu.open { left: 0; }
-.side-menu.closed { left: -270px; }
+.side-menu.closed { left: -320px; transform: translateX(-100%); }
 
 @media (min-width: 769px) {
     body.menu-open #map {

@@ -24,8 +24,8 @@ body.dark-mode #grupoPMAC label {
     color: #f0f0f0;            /* texto claro */
     border-radius: 4px;
     display: block;
-    padding: 5px;
-    margin-bottom: 3px;
+    margin: 4px 0;             /* igual ao light mode */
+    padding: 3px;              /* igual ao light mode */
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -44,14 +44,12 @@ body.dark-mode #grupoPMAC label[style*="border-left"] {
 }
 
 body.dark-mode #grupoPMACCameras label {
-    background: #3a3a3a;
-    color: #f0f0f0;
+    background: #3a3a3a;       /* fundo mais escuro */
+    color: #f0f0f0;            /* texto claro */
     border-radius: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px;
-    margin-bottom: 3px;
+    display: block;            /* mantém igual aos outros grupos */
+    margin: 4px 0;             /* igual ao light mode e outros grupos no dark */
+    padding: 3px;              /* igual aos outros grupos */
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -60,7 +58,9 @@ body.dark-mode #grupoPMACCameras label:hover {
 }
 
 body.dark-mode #grupoPMACCameras label img {
-    width: 50px;
-    height: 50px;
-    filter: brightness(0) invert(1); /* Ajuste para melhor visibilidade no modo escuro */
+    width: 20px;       /* reduzido para ficar proporcional */
+    height: 20px;
+    filter: brightness(0) invert(1);
+    margin-right: 8px; /* mesmo espaçamento com o texto */
+    vertical-align: middle;
 }
