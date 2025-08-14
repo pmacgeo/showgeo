@@ -73,10 +73,25 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnib
         adicionarCheckboxLayer(grupoPMACCameras, nome, layer, false, null, svgUrls[nome]);
     });
 
-    // Ônibus PMAC
+    // PMAC - Ônibus com ícones diferentes para Linha e Ponto
     if (basePMACOnibus) {
         Object.entries(basePMACOnibus).forEach(([nome, layer]) => {
-            adicionarCheckboxLayer(grupoPMACOnibus, nome, layer, false);
+            // Dentro da função que preenche o menu, ao percorrer os nomes das camadas de ônibus:
+            let nomeExibido;
+            let iconUrl = null;
+
+            if (nome.toLowerCase().includes('ponto')) {
+                iconUrl = 'geojson/pmac-onibus/bus-stop-icon.png';
+                nomeExibido = nome.replace(/^(Pontos? de Ônibus(?: -)?\s*)/i, '');
+            } else if (nome.toLowerCase().includes('linha')) {
+                iconUrl = 'geojson/pmac-onibus/bus-line-icon.png';
+                nomeExibido = nome.replace(/^Linha\s*/i, '');
+            } else {
+                nomeExibido = nome;
+            }
+
+            // Passa nomeExibido (sem a palavra inicial) para a função que adiciona o checkbox
+            adicionarCheckboxLayer(grupoPMACOnibus, nomeExibido, layer, false, null, iconUrl);
         });
     }
 }
