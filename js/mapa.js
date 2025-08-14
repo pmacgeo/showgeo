@@ -324,8 +324,8 @@ async function criarMapa() {
     L.control.scale({ position: 'bottomleft', metric: true }).addTo(map);
 }
 
-function inicializarMapa() {
-    criarMapa();
-    // inicializarMapaComSatelite();
+async function inicializarMapa() {
+    await criarMapa();
     setRadioLayerByName('Imagem de Satélite');
 }
+
