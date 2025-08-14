@@ -42,3 +42,25 @@ body.dark-mode #grupoIBGE label[style*="border-left"],
 body.dark-mode #grupoPMAC label[style*="border-left"] {
     background: #3a3a3a;
 }
+
+body.dark-mode #grupoPMACCameras label {
+    background: #3a3a3a;
+    color: #f0f0f0;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px;
+    margin-bottom: 3px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark-mode #grupoPMACCameras label:hover {
+    background: #505050;
+}
+
+body.dark-mode #grupoPMACCameras label img {
+    width: 50px;
+    height: 50px;
+    filter: brightness(0) invert(1); /* Ajuste para melhor visibilidade no modo escuro */
+}
