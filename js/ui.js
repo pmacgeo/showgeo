@@ -1,9 +1,10 @@
-function preencherGruposNoMenu(baseIBGE, basePMAC) {
+function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras) {
     const grupoBase = document.getElementById('grupoBase');
     const grupoIBGE = document.getElementById('grupoIBGE');
     const grupoPMAC = document.getElementById('grupoPMAC');
+    const grupoPMACCameras = document.getElementById('grupoPMACCameras');
 
-    // 1 — Radios para mapas base + opção nenhum
+    // Radios mapas base
     adicionarRadioBase(grupoBase, 'Nenhum mapa base', null);
     [
         { nome: 'OpenStreetMap', layer: openStreetMap },
@@ -12,7 +13,7 @@ function preencherGruposNoMenu(baseIBGE, basePMAC) {
         { nome: 'Carto Dark', layer: cartoDark }
     ].forEach(b => adicionarRadioBase(grupoBase, b.nome, b.layer));
 
-    // 2 — IBGE com cor nos labels
+    // Camadas IBGE
     const coresIBGE = {
         'Limite Estadual': '#2980b9',
         'Limite Municipal': '#27ae60',
@@ -23,12 +24,12 @@ function preencherGruposNoMenu(baseIBGE, basePMAC) {
         adicionarCheckboxLayer(grupoIBGE, nome, layer, false, coresIBGE[nome]);
     });
 
-    // Zoneamentos (PMAC)
+    // Zoneamento PMAC
     Object.entries(basePMAC).forEach(([nome, layer]) => {
         adicionarCheckboxLayer(grupoPMAC, nome, layer, true);
     });
 
-    // 3 — Botão zoneamentos sincroniza checkboxes
+    // Botão para ativar/desativar todos os zoneamentos PMAC
     document.getElementById('toggleAllZoneamentos').addEventListener('click', () => {
         const checkboxes = grupoPMAC.querySelectorAll('input[type=checkbox]');
         const algumAtivo = Object.values(basePMAC).some(l => map.hasLayer(l));
@@ -41,6 +42,19 @@ function preencherGruposNoMenu(baseIBGE, basePMAC) {
                 checkboxes[idx].checked = true;
             }
         });
+    });
+
+    // Câmeras PMAC - adiciona apenas uma vez com SVG no label
+    const svgUrls = {
+        'Botão Pânico': 'geojson/pmac-cams/botao_panico/cake_13676147.png', //botao_panico.svg
+        'Câmera 360': 'geojson/pmac-cams/cam360/360-camera_1623635.png', //camera_360.svg
+        'Câmera Comum': 'geojson/pmac-cams/comum/video-camera_99439.png', //camera_comum.svg
+        'OCR': 'geojson/pmac-cams/ocr/ocr_5376234.png', //ocr.svg
+        'Reconhecimento Facial': 'geojson/pmac-cams/rec_facial/masked-man_8269102.png' //rec_facial.svg
+    };
+
+    Object.entries(basePMACCameras).forEach(([nome, layer]) => {
+        adicionarCheckboxLayer(grupoPMACCameras, nome, layer, false, null, svgUrls[nome]);
     });
 }
 
@@ -58,7 +72,7 @@ function adicionarRadioBase(container, nome, layer) {
     container.appendChild(label);
 }
 
-function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, cor = null) {
+function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, cor = null, svgUrl = null) {
     const label = document.createElement('label');
     const check = document.createElement('input');
     check.type = 'checkbox';
@@ -67,9 +81,26 @@ function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, co
         if (check.checked) layer.addTo(map);
         else map.removeLayer(layer);
     });
+
+    // Checkbox
     label.appendChild(check);
+    label.appendChild(document.createTextNode(' ')); // <-- Espaço entre botão e texto
+
+    // Se tiver ícone (caso das câmeras)
+    if (svgUrl) {
+        const img = document.createElement('img');
+        img.src = svgUrl;
+        img.style.width = '20px';
+        img.style.height = '20px';
+        img.style.marginRight = '8px';
+        img.style.verticalAlign = 'middle';
+        label.appendChild(img);
+    }
+
+    // Nome da camada
     label.appendChild(document.createTextNode(nome));
 
+    // Cores nos zoneamentos ou IBGE
     if (isZoneamento) {
         const zoneamentoCores = {
             'Zona ZCVS': '#FF7800', 'Zona EC': '#abcdef', 'Zona ZEDS': '#3498db',
@@ -87,6 +118,7 @@ function adicionarCheckboxLayer(container, nome, layer, isZoneamento = false, co
         label.style.borderLeft = `8px solid ${cor}`;
         label.style.paddingLeft = '8px';
     }
+
     container.appendChild(label);
 }
 
@@ -97,8 +129,8 @@ function aplicarCoresLabels() {
         else if (txt.includes('Limite Municipal')) lbl.style.setProperty('--layer-color', '#27ae60');
         else if (txt.includes('Logradouros')) lbl.style.setProperty('--layer-color', '#f39c12');
         else if (txt.includes('Relevo')) lbl.style.setProperty('--layer-color', '#8b4513');
-        else if (txt.includes('PMAC Dados 1')) lbl.style.setProperty('--layer-color', '#e67e22');
-        else if (txt.includes('PMAC Dados 2')) lbl.style.setProperty('--layer-color', '#c0392b');
+        // else if (txt.includes('PMAC Dados 1')) lbl.style.setProperty('--layer-color', '#e67e22');
+        // else if (txt.includes('PMAC Dados 2')) lbl.style.setProperty('--layer-color', '#c0392b');
     });
 
     document.querySelectorAll('.leaflet-control-layers-base label').forEach(lbl => {
