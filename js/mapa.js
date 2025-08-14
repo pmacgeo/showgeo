@@ -137,18 +137,35 @@ function criarMapa() {
         ];
 
         return Promise.all(zoneamentoFiles.map(z =>
-            carregarGeoJSONComDetalhes(z.file, { color: z.color, weight: 2, fillOpacity: 0.3 }, z.name, 'pmac')
-                .then(layer => { if (layer) overlayPMAC[z.name] = layer; })
+            carregarGeoJSONComDetalhes(
+                z.file,
+                { color: z.color, weight: 2, fillOpacity: 0.3 },
+                z.name,
+                'pmac'
+            ).then(layer => {
+                if (layer) {
+                    overlayPMAC[z.name] = layer;
+                    // ❌ NÃO incrementa aqui, já é feito em carregarGeoJSONComDetalhes()
+                }
+            })
         )).then(() => {
             return Promise.all(camerasFiles.map(cam =>
                 carregarGeoJSONPmacCameras(cam.file, cam.svg, cam.name)
-                    .then(layer => { if (layer) overlayPMACCameras[cam.name] = layer; })
+                    .then(layer => {
+                        if (layer) {
+                            overlayPMACCameras[cam.name] = layer;
+                            camadasCarregadas++;          // ✅ Só aqui incrementa
+                            atualizarDiagnostico();
+                        }
+                    })
             ));
         }).then(() => {
-            totalCamadas = Object.keys(overlayIBGE).length + Object.keys(overlayPMAC).length + Object.keys(overlayPMACCameras).length;
+            totalCamadas = Object.keys(overlayIBGE).length +
+                Object.keys(overlayPMAC).length +
+                Object.keys(overlayPMACCameras).length;
+
             preencherGruposNoMenu(overlayIBGE, overlayPMAC, overlayPMACCameras);
 
-            // Define o mapa base satélite após preparar o menu
             setTimeout(() => {
                 setRadioLayerByName('Imagem de Satélite');
             }, 100);
