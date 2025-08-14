@@ -47,7 +47,7 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras) {
     // Câmeras PMAC - adiciona apenas uma vez com SVG no label
     const svgUrls = {
         'Botão Pânico': 'geojson/pmac-cams/botao_panico/cake_13676147.png', //botao_panico.svg
-        'Câmera 360': 'geojson/pmac-cams/cam360/360-camera_1623635.png', //camera_360.svg
+        'Câmera 360': 'geojson/pmac-cams/cam360/360-camera_1623453.png', //camera_360.svg
         'Câmera Comum': 'geojson/pmac-cams/comum/video-camera_99439.png', //camera_comum.svg
         'OCR': 'geojson/pmac-cams/ocr/ocr_5376234.png', //ocr.svg
         'Reconhecimento Facial': 'geojson/pmac-cams/rec_facial/masked-man_8269102.png' //rec_facial.svg
