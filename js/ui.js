@@ -1,9 +1,10 @@
-function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnibus) {
+function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnibus, basePMACAmbiental) {
     const grupoBase = document.getElementById('grupoBase');
     const grupoIBGE = document.getElementById('grupoIBGE');
     const grupoPMAC = document.getElementById('grupoPMAC');
     const grupoPMACCameras = document.getElementById('grupoPMACCameras');
     const grupoPMACOnibus = document.getElementById('grupoPMACOnibus');
+    const grupoPMACAmbiental = document.getElementById('grupoPMACAmbiental');
 
     // Radios mapas base
     adicionarRadioBase(grupoBase, 'Nenhum mapa base', null);
@@ -118,6 +119,28 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnib
             });
         }
     }
+
+    // PMAC - Ambiental
+    Object.entries(basePMACAmbiental).forEach(([nome, layer]) =>
+        adicionarCheckboxLayer(grupoPMACAmbiental, nome, layer, false)
+    );
+
+    // Botão para ativar/desativar
+    document.getElementById('toggleAllAmbiental').addEventListener('click', () => {
+        const checkboxes = grupoPMACAmbiental.querySelectorAll('input[type=checkbox]');
+        const algumaAtiva = Object.values(basePMACAmbiental).some(l => map.hasLayer(l));
+        Object.values(basePMACAmbiental).forEach((layer, idx) => {
+            if (algumaAtiva) {
+                map.removeLayer(layer);
+                checkboxes[idx].checked = false;
+            } else {
+                layer.addTo(map);
+                checkboxes[idx].checked = true;
+            }
+        });
+    });
+
+
 }
 
 function adicionarRadioBase(container, nome, layer) {

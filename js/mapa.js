@@ -9,11 +9,13 @@ const overlayIBGE = {};
 const overlayPMAC = {};
 const overlayPMACCameras = {};
 const overlayPMACOnibus = {};
+const overlayPMACAmbiental = {};
 
 camadasPorTipo['ibge'] = overlayIBGE;
 camadasPorTipo['pmac'] = overlayPMAC;
 camadasPorTipo['pmac_cameras'] = overlayPMACCameras;
 camadasPorTipo['pmac_onibus'] = overlayPMACOnibus;
+camadasPorTipo['pmac_ambiental'] = overlayPMACAmbiental;
 
 // Camadas base
 let openStreetMap, satelliteLayer, cartoLight, cartoDark;
@@ -103,6 +105,27 @@ async function criarMapa() {
         { file: 'geojson/pmac-onibus/pontos_de_onibus_340.geojson', name: 'Pontos de Ônibus - Linha 340', point: true },
         { file: 'geojson/pmac-onibus/pontos_de_onibus_341.geojson', name: 'Pontos de Ônibus - Linha 341', point: true }
     ];
+
+    // Arquivos e cores para zoneamento ambiental PMAC
+    const ambientalFiles = [
+        { file: 'geojson/pmac-ambiental/APA MASSAMBABA - FETURE LABELS.geojson', name: 'APA Massambaba Labels', color: '#27ae60' },
+        { file: 'geojson/pmac-ambiental/APA_MASSAMBABA_ZCVS.geojson', name: 'APA Massambaba ZCVS', color: '#FF7800' },
+        { file: 'geojson/pmac-ambiental/APA_MASSAMBABA_ZEUF.geojson', name: 'APA Massambaba ZEUF', color: '#8e44ad' },
+        { file: 'geojson/pmac-ambiental/APA_MASSAMBABA_ZIE.geojson', name: 'APA Massambaba ZIE', color: '#d35400' },
+        { file: 'geojson/pmac-ambiental/APA_MASSAMBABA_ZOC.geojson', name: 'APA Massambaba ZOC', color: '#1abc9c' },
+        { file: 'geojson/pmac-ambiental/APA_MASSAMBABA_ZPVS.geojson', name: 'APA Massambaba ZPVS', color: '#16a085' },
+        { file: 'geojson/pmac-ambiental/FMP_LAGOA_DE_ARARUAMA.geojson', name: 'FMP Lagoa de Araruama', color: '#2980b9' },
+        { file: 'geojson/pmac-ambiental/HIDRO_25000_LAGOS_SÃO_JOÃO.geojson', name: 'Hidr. Lagos São João', color: '#3498db' },
+        { file: 'geojson/pmac-ambiental/NADB_ZON19_FIM_ADBRANCA_FINAL.geojson', name: 'NADB Zona 19 Ad Branca', color: '#34495e' },
+        { file: 'geojson/pmac-ambiental/NMAS_ZON19_FIM_MAS_FINAL.geojson', name: 'NMAS Zona 19 Mas', color: '#2c3e50' },
+        { file: 'geojson/pmac-ambiental/PARQUE_ESTADUAL_DA_COSTA_DO_SOL.geojson', name: 'Parque Estadual Costa do Sol', color: '#f1c40f' },
+        { file: 'geojson/pmac-ambiental/PARQUE_ESTADUAL_DA_COSTA_DO_SOL_ILHAS_DO_PECS.geojson', name: 'Parque Costa do Sol Ilhas', color: '#9b59b6' },
+        { file: 'geojson/pmac-ambiental/PARQUE_ESTADUAL_DA_COSTA_DO_SOL_N_PECS.geojson', name: 'Parque Costa do Sol N PECS', color: '#7f8c8d' },
+        { file: 'geojson/pmac-ambiental/PARQUE_ESTADUAL_DA_COSTA_DO_SOL_NUC_DO_PECS_LINHA.geojson', name: 'Parque Costa do Sol Núcleo Linha', color: '#e67e22' },
+        { file: 'geojson/pmac-ambiental/PARQUE_ESTADUAL_DA_COSTA_DO_SOL_TRILHAS.geojson', name: 'Parque Costa do Sol Trilhas', color: '#27ae60' },
+        { file: 'geojson/pmac-ambiental/ZONEAMENTO_RESEX_MARINHA_DE_ARRAIAL_DO_CABO.geojson', name: 'Zoneamento RESEX Marinha', color: '#c0392b' }
+    ];
+
 
     // Função para carregar arquivos GeoJSON com estilo e popup - reutiliza função existente
     async function carregarGeoJSONComDetalhesAsync(file, estilo, nomeDisplay, tipoCamada) {
@@ -288,23 +311,34 @@ async function criarMapa() {
             }
         });
 
+        // Promessas ambientais
+        const promAmbiental = ambientalFiles.map(f =>
+            carregarGeoJSONComDetalhesAsync(f.file, { color: f.color, weight: 2, fillOpacity: 0.4 }, f.name, 'pmac_ambiental')
+        );
+
         // Aguarda todas as promessas resolverem
-        const [ibgeLayers, pmacLayers, cameraLayers] = await Promise.all([
+        const [ibgeLayers, pmacLayers, cameraLayers, ambientalLayers] = await Promise.all([
             Promise.all(promIBGE),
             Promise.all(promPMAC),
-            Promise.all(promCameras)
+            Promise.all(promCameras),
+            Promise.all(promAmbiental)
         ]);
 
-        // Atualiza os grupos IBGE, PMAC, Câmeras com as camadas carregadas
+        // Atualiza os grupos IBGE, PMAC, Câmeras, Ambiental com as camadas carregadas
         ibgeLayers.forEach((layer, i) => { if (layer) overlayIBGE[ibgeFiles[i].name] = layer; });
         pmacLayers.forEach((layer, i) => { if (layer) overlayPMAC[zoneamentoFiles[i].name] = layer; });
         cameraLayers.forEach((layer, i) => { if (layer) overlayPMACCameras[camerasFiles[i].name] = layer; });
+        ambientalLayers.forEach((layer, i) => { if (layer) overlayPMACAmbiental[ambientalFiles[i].name] = layer; });
 
         // Aguarda carregamento dos ônibus (já adicionados em overlayPMACOnibus via then acima)
         await Promise.all(promOnibus);
 
         // Atualiza total de camadas carregadas (supondo que exista a variável global totalCamadas)
-        const totalCount = Object.keys(overlayIBGE).length + Object.keys(overlayPMAC).length + Object.keys(overlayPMACCameras).length + Object.keys(overlayPMACOnibus).length;
+        const totalCount = Object.keys(overlayIBGE).length
+            + Object.keys(overlayPMAC).length
+            + Object.keys(overlayPMACCameras).length
+            + Object.keys(overlayPMACOnibus).length
+            + Object.keys(overlayPMACAmbiental).length;
         if (typeof totalCamadas !== 'undefined') {
             totalCamadas = totalCount;
         }
@@ -314,7 +348,7 @@ async function criarMapa() {
         }
 
         // Atualiza o menu lateral com todas as camadas carregadas
-        preencherGruposNoMenu(overlayIBGE, overlayPMAC, overlayPMACCameras, overlayPMACOnibus);
+        preencherGruposNoMenu(overlayIBGE, overlayPMAC, overlayPMACCameras, overlayPMACOnibus, overlayPMACAmbiental);
 
     } catch (error) {
         console.error("Erro geral ao carregar camadas do mapa:", error);
