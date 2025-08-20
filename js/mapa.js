@@ -10,12 +10,14 @@ const overlayPMAC = {};
 const overlayPMACCameras = {};
 const overlayPMACOnibus = {};
 const overlayPMACAmbiental = {};
+const overlayPMACVias = {};
 
 camadasPorTipo['ibge'] = overlayIBGE;
 camadasPorTipo['pmac'] = overlayPMAC;
 camadasPorTipo['pmac_cameras'] = overlayPMACCameras;
 camadasPorTipo['pmac_onibus'] = overlayPMACOnibus;
 camadasPorTipo['pmac_ambiental'] = overlayPMACAmbiental;
+camadasPorTipo['pmac_vias'] = overlayPMACVias;
 
 // Camadas base
 let openStreetMap, satelliteLayer, cartoLight, cartoDark;
@@ -126,6 +128,12 @@ async function criarMapa() {
         { file: 'geojson/pmac-ambiental/ZONEAMENTO_RESEX_MARINHA_DE_ARRAIAL_DO_CABO.geojson', name: 'Zoneamento RESEX Marinha', color: '#c0392b' }
     ];
 
+    // Arquivos para vias PMAC
+    const viasFiles = [
+        { file: 'geojson/pmac-vias/ruas_arraial_do_cabo.geojson', name: 'Ruas de Arraial do Cabo', color: '#20b2aa' },
+        { file: 'geojson/pmac-vias/trilhas_arraial_do_cabo.geojson', name: 'Trilhas de Arraial do Cabo', color: '#b8860b', dashArray: '4 4' },
+        { file: 'geojson/pmac-vias/vias_alternativas_arraial_do_cabo.geojson', name: 'Vias Alternativas de Arraial do Cabo', color: '#ff1493', dashArray: '1 6' }
+    ];
 
     // Função para carregar arquivos GeoJSON com estilo e popup - reutiliza função existente
     async function carregarGeoJSONComDetalhesAsync(file, estilo, nomeDisplay, tipoCamada) {
@@ -283,6 +291,43 @@ async function criarMapa() {
         }
     }
 
+    // Função para carregar vias com estilo personalizado
+    async function carregarGeoJSONVia(file, color, nomeDisplay, dashArray = null) {
+        try {
+            const response = await fetch(file);
+            if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const data = await response.json();
+
+            const style = {
+                color: color,
+                weight: 4,
+                opacity: 0.85,
+                dashArray: dashArray || null
+            };
+
+            const layer = L.geoJSON(data, {
+                style: style,
+                onEachFeature: (feature, layer) => {
+                    let popup = `<h4>${nomeDisplay}</h4>`;
+                    if (feature.properties) {
+                        for (const prop in feature.properties) {
+                            popup += `<p><strong>${prop}:</strong> ${feature.properties[prop]}</p>`;
+                        }
+                    }
+                    layer.bindPopup(popup);
+                }
+            });
+
+            overlayPMACVias[nomeDisplay] = layer;
+            camadasCarregadas++;
+            atualizarDiagnostico();
+            return layer;
+        } catch (error) {
+            console.error(`Erro ao carregar ${file}:`, error);
+            return null;
+        }
+    }
+
     // Carrega em paralelo todas as camadas necessárias
     try {
         // Promessas para IBGE
@@ -316,12 +361,16 @@ async function criarMapa() {
             carregarGeoJSONComDetalhesAsync(f.file, { color: f.color, weight: 2, fillOpacity: 0.4 }, f.name, 'pmac_ambiental')
         );
 
+        // Promessas para vias PMAC
+        const promVias = viasFiles.map(v => carregarGeoJSONVia(v.file, v.color, v.name, v.dashArray));
+
         // Aguarda todas as promessas resolverem
-        const [ibgeLayers, pmacLayers, cameraLayers, ambientalLayers] = await Promise.all([
+        const [ibgeLayers, pmacLayers, cameraLayers, ambientalLayers, viasLayers] = await Promise.all([
             Promise.all(promIBGE),
             Promise.all(promPMAC),
             Promise.all(promCameras),
-            Promise.all(promAmbiental)
+            Promise.all(promAmbiental),
+            Promise.all(promVias)
         ]);
 
         // Atualiza os grupos IBGE, PMAC, Câmeras, Ambiental com as camadas carregadas
@@ -329,6 +378,7 @@ async function criarMapa() {
         pmacLayers.forEach((layer, i) => { if (layer) overlayPMAC[zoneamentoFiles[i].name] = layer; });
         cameraLayers.forEach((layer, i) => { if (layer) overlayPMACCameras[camerasFiles[i].name] = layer; });
         ambientalLayers.forEach((layer, i) => { if (layer) overlayPMACAmbiental[ambientalFiles[i].name] = layer; });
+        viasLayers.forEach((layer, i) => { if (layer) overlayPMACVias[viasFiles[i].name] = layer; });
 
         // Aguarda carregamento dos ônibus (já adicionados em overlayPMACOnibus via then acima)
         await Promise.all(promOnibus);
@@ -338,7 +388,8 @@ async function criarMapa() {
             + Object.keys(overlayPMAC).length
             + Object.keys(overlayPMACCameras).length
             + Object.keys(overlayPMACOnibus).length
-            + Object.keys(overlayPMACAmbiental).length;
+            + Object.keys(overlayPMACAmbiental).length
+            + Object.keys(overlayPMACVias).length;
         if (typeof totalCamadas !== 'undefined') {
             totalCamadas = totalCount;
         }
@@ -348,7 +399,7 @@ async function criarMapa() {
         }
 
         // Atualiza o menu lateral com todas as camadas carregadas
-        preencherGruposNoMenu(overlayIBGE, overlayPMAC, overlayPMACCameras, overlayPMACOnibus, overlayPMACAmbiental);
+        preencherGruposNoMenu(overlayIBGE, overlayPMAC, overlayPMACCameras, overlayPMACOnibus, overlayPMACAmbiental, overlayPMACVias);
 
     } catch (error) {
         console.error("Erro geral ao carregar camadas do mapa:", error);
