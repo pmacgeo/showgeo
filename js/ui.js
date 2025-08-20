@@ -1,10 +1,11 @@
-function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnibus, basePMACAmbiental) {
+function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnibus, basePMACAmbiental, basePMACVias) {
     const grupoBase = document.getElementById('grupoBase');
     const grupoIBGE = document.getElementById('grupoIBGE');
     const grupoPMAC = document.getElementById('grupoPMAC');
     const grupoPMACCameras = document.getElementById('grupoPMACCameras');
     const grupoPMACOnibus = document.getElementById('grupoPMACOnibus');
     const grupoPMACAmbiental = document.getElementById('grupoPMACAmbiental');
+    const grupoPMACVias = document.getElementById('grupoPMACVias');
 
     // Radios mapas base
     adicionarRadioBase(grupoBase, 'Nenhum mapa base', null);
@@ -140,6 +141,25 @@ function preencherGruposNoMenu(baseIBGE, basePMAC, basePMACCameras, basePMACOnib
         });
     });
 
+    // PMAC - Vias Terrestres
+        Object.entries(basePMACVias).forEach(([nome, layer]) =>
+            adicionarCheckboxLayer(grupoPMACVias, nome, layer, false)
+        );
+
+    // Botão para ativar/desativar todas as vias
+        document.getElementById('toggleAllVias').addEventListener('click', () => {
+            const checkboxes = grupoPMACVias.querySelectorAll('input[type=checkbox]');
+            const algumaAtiva = Object.values(basePMACVias).some(l => map.hasLayer(l));
+            Object.values(basePMACVias).forEach((layer, idx) => {
+                if (algumaAtiva) {
+                    map.removeLayer(layer);
+                    checkboxes[idx].checked = false;
+                } else {
+                    layer.addTo(map);
+                    checkboxes[idx].checked = true;
+                }
+            });
+        });
 
 }
 
