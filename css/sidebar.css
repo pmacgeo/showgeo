@@ -22,6 +22,7 @@
 .side-menu.open { left: 0; }
 .side-menu.closed { left: -320px; transform: translateX(-100%); }
 
+/* Ajuste no corpo para deslocar o mapa quando o menu está aberto */
 @media (min-width: 769px) {
     body.menu-open #map {
         margin-left: 270px;
@@ -36,6 +37,20 @@
     padding: 6px 10px;
     border-radius: 4px;
     cursor: pointer;
+}
+
+details {
+    margin-bottom: 8px; /* Espaço inferior entre camadas */
+    display: block;     /* Garante que cada label fique em bloco separado */
+    padding: 4px 8px;   /* Um pouco de espaçamento interno para conforto visual */
+    border-radius: 5px; /* Bordas arredondadas para um visual melhor */
+    cursor: pointer;    /* Cursor pointer para melhor usabilidade */
+    transition: background-color 0.2s ease;
+}
+
+details:hover {
+    background-color: #505050; /* Hover suave para melhor feedback visual */
+    color:#fff;
 }
 
 details summary {
