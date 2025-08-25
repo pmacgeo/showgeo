@@ -45,13 +45,13 @@ details {
     padding: 4px 8px;   /* Um pouco de espaçamento interno para conforto visual */
     border-radius: 5px; /* Bordas arredondadas para um visual melhor */
     cursor: pointer;    /* Cursor pointer para melhor usabilidade */
-    transition: background-color 0.2s ease;
+    /*transition: background-color 0.2s ease;*/
 }
 
-details:hover {
-    background-color: #505050; /* Hover suave para melhor feedback visual */
-    color:#fff;
-}
+/*details:hover {*/
+/*    background-color: #505050; !* Hover suave para melhor feedback visual *!*/
+/*    color:#fff;*/
+/*}*/
 
 details summary {
     font-weight: bold;
