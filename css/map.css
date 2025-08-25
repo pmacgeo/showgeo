@@ -13,9 +13,34 @@ body.dark-mode .map-container {
     background: var(--cor-fundo-escuro);
 }
 
+/* Ajuste para mapa ocupar quase toda a altura da viewport */
 #map {
-    height: 700px;
-    width: 100%;
+    height: 80vh; /* altura reduzida para 80% da viewport */
+    width: 100vw; /* largura total da viewport */
+    max-width: 100vw;
+    margin-left: 0 !important; /* força não ter margem à esquerda */
+}
+
+/* Ajuste da margem do mapa quando o menu lateral está aberto, moderando o espaçamento */
+@media (min-width: 769px) {
+    body.menu-open #map {
+        margin-left: 270px;
+    }
+}
+
+/* Remove recuo na largura para telas grandes */
+@media (min-width: 1200px) {
+    body.menu-open #map {
+        margin-left: 0 !important;
+        width: 100vw !important;
+    }
+}
+
+/* Para telas pequenas, pode manter o deslocamento se desejar */
+@media (max-width: 1199px) {
+    body.menu-open #map {
+        margin-left: 270px; /* só recua em telas menores */
+    }
 }
 
 #camadasList label {
@@ -23,5 +48,18 @@ body.dark-mode .map-container {
     padding: 5px;
     margin-bottom: 3px;
     border-radius: 4px;
-    background: #ecf0f1;
+}
+
+/* Regras específicas para telas 4K e maiores */
+@media (min-width: 3840px) {
+    .leaflet-container {
+        font-size: 1.5em; /* aumenta o tamanho da fonte do mapa */
+    }
+    .leaflet-popup-content {
+        font-size: 1.2em;
+    }
+    .leaflet-tooltip {
+        font-size: 1.2em;
+    }
+    /* Pode ajustar ícones, controles e outros elementos conforme necessidade */
 }
