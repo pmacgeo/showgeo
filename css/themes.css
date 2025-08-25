@@ -120,6 +120,10 @@ body.dark-mode details summary {
     color: #eee;
 }
 
+details:hover {
+    background-color: #505050;    /* Hover suave para melhor feedback visual */
+}
+
 /* Botões pequenos no dark */
 body.dark-mode .btn-small {
     background: #444;
