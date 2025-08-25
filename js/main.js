@@ -30,6 +30,15 @@ function inicializarMapaComSatelite() {
     setRadioLayerByName('Imagem de Satélite');
 }
 
+// Função para ajustar o tamanho do mapa dinamicamente
+function ajustarTamanhoMapa() {
+    const mapElement = document.getElementById('map');
+    const topBarHeight = document.querySelector('.top-bar') ? document.querySelector('.top-bar').offsetHeight : 50;
+    mapElement.style.height = (window.innerHeight - topBarHeight) + 'px';
+    mapElement.style.width = '100%';
+    if (map) map.invalidateSize(); // Atualiza o Leaflet para novo tamanho
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Ativa modo escuro por padrão
     document.body.classList.add('dark-mode');
@@ -44,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Aguarda para garantir que o mapa esteja criado, depois ativa o satélite
     setTimeout(inicializarMapaComSatelite, 300);
+
+    // Ajusta tamanho do mapa na inicialização e quando a janela for redimensionada
+    ajustarTamanhoMapa();
+    window.addEventListener('resize', ajustarTamanhoMapa);
 
     // Controle da abertura do menu lateral conforme tamanho da tela
     if (window.innerWidth >= 769) {
@@ -69,6 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sideMenu.classList.toggle('closed', !aberto);
         document.body.classList.toggle('menu-open', aberto);
         hamburgerBtn.textContent = aberto ? '✖' : '☰';
+        ajustarTamanhoMapa(); // Ajusta tamanho do mapa quando menu abre/fecha
     });
 
     // Botões de modo escuro
@@ -91,6 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     //         sideMenu.classList.add('closed');
     //         document.body.classList.remove('menu-open');
     //         hamburgerBtn.textContent = '☰';
+    //         ajustarTamanhoMapa();
     //     }
     // });
 });
