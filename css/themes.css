@@ -82,3 +82,50 @@ body.dark-mode #grupoPMACOnibus label:hover {
 body.dark-mode #grupoPMACOnibus label img {
     filter: brightness(0) invert(1);
 }
+
+/* ====== AJUSTES FALTANTES PARA O MODO ESCURO ====== */
+
+/* Barra de pesquisa */
+body.dark-mode .top-bar .search-container input {
+    background: #444;
+    color: #f0f0f0;
+    border: 1px solid #666;
+}
+body.dark-mode .top-bar .search-container button {
+    background: #555;
+    color: #fff;
+}
+body.dark-mode .top-bar .search-container button:hover {
+    background: #777;
+}
+
+/* Diagnóstico / status */
+body.dark-mode .diagnostico-ok { background: #2e4d35; color: #9be5a2; }
+body.dark-mode .diagnostico-erro { background: #5a2c2c; color: #f4a5a5; }
+body.dark-mode .diagnostico-aviso { background: #5a5230; color: #f6d98b; }
+
+body.dark-mode .status-indicator.loading { background: #b67a1d; }
+body.dark-mode .status-indicator.error { background: #c0392b; }
+body.dark-mode .status-indicator.success { background: #27ae60; }
+
+/* Labels genéricos dentro do container de camadas */
+body.dark-mode #camadasList label,
+body.dark-mode #camadasContainer label {
+    background: #333;
+    color: #eee;
+}
+
+/* Summary no dark */
+body.dark-mode details summary {
+    color: #eee;
+}
+
+/* Botões pequenos no dark */
+body.dark-mode .btn-small {
+    background: #444;
+    color: #eee;
+    border: 1px solid #666;
+}
+body.dark-mode .btn-small:hover {
+    background: #555;
+}
