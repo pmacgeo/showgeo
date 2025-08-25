@@ -24,25 +24,28 @@ let openStreetMap, satelliteLayer, cartoLight, cartoDark;
 
 // Função para criar o mapa e carregar todas as camadas
 async function criarMapa() {
-    // Inicializa o mapa centrado em Arraial do Cabo - RJ
-    map = L.map('map').setView([-22.94978, -42.080], 12);
+    // Inicializa o mapa centrado em Arraial do Cabo - RJ, com zoomSnap e maxZoom ajustados
+    map = L.map('map', {
+        zoomSnap: 0.25,  // zoom mais refinado, sem travar nos níveis inteiros
+        maxZoom: 22      // zoom máximo aumentado para melhor visualização em 4K
+    }).setView([-22.94978, -42.080], 12);
 
-    // Define as camadas base (tiles)
+    // Define as camadas base (tiles) com maxZoom aumentados
     openStreetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
-        maxZoom: 18
+        maxZoom: 22
     });
     satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
         attribution: '© Esri',
-        maxZoom: 18
+        maxZoom: 22
     });
     cartoLight = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap/CARTO',
-        maxZoom: 18
+        maxZoom: 22
     });
     cartoDark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
         attribution: '© OpenStreetMap/CARTO',
-        maxZoom: 18
+        maxZoom: 22
     });
 
     // Adiciona camada base inicial
